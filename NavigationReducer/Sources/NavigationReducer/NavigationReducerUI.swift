@@ -35,17 +35,17 @@ public struct NavigationReducerUI<NavigationReducer>: View where NavigationReduc
                     )
                 }
             }
-            .sheet(
-                isPresented: .init(get: {
-                    viewStore.navigation.currentModal != nil
-                }, set: {
-                    if !$0 {
-                        viewStore.send(.navigation(.dismiss))
-                    }
-                })
-            ) {
-                modalView(viewStore.navigation.currentModal!)
-            }
+//            .sheet(
+//                isPresented: .init(get: {
+//                    viewStore.navigation.currentModal != nil
+//                }, set: {
+//                    if !$0 {
+//                        viewStore.send(.navigation(.dismiss))
+//                    }
+//                })
+//            ) {
+//                modalView(viewStore.navigation.currentModal!)
+//            }
         }
     }
 }

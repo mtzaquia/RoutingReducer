@@ -32,10 +32,10 @@ struct AppNavigation: NavigationReducerProtocol {
     func handleNavigation(_ action: NavigationAction<AppDestination>) -> AppDestination.NavigationAction? {
         switch action {
             case .root(.push): return .push(.first(.init()))
-            case .root(.present): return .present(.first(.init()))
+//            case .root(.present): return .present(.first(.init()))
             case .destination(_, .first(.push)): return .push(.second(.init()))
             case .destination(_, .first(.pop)): return .pop()
-            case .destination(_, .first(.present)): return .present(.second(.init()))
+//            case .destination(_, .first(.present)): return .present(.second(.init()))
             case .destination(_, .second(.pop)): return .pop()
             case .destination(_, .second(.popToRoot)): return .pop(toRoot: true)
             default: break
@@ -46,19 +46,19 @@ struct AppNavigation: NavigationReducerProtocol {
 
     var rootReducer = Landing()
 
-    var ifLetReducer: some ReducerProtocol<Destination, Destination.Action> {
-        EmptyReducer()
-            .ifCaseLet(
-                /Destination.first,
-                 action: /Destination.Action.first,
-                 then: First.init
-            )
-            .ifCaseLet(
-                /Destination.second,
-                 action: /Destination.Action.second,
-                 then: Second.init
-            )
-    }
+//    var ifLetReducer: some ReducerProtocol<Destination, Destination.Action> {
+//        EmptyReducer()
+//            .ifCaseLet(
+//                /Destination.first,
+//                 action: /Destination.Action.first,
+//                 then: First.init
+//            )
+//            .ifCaseLet(
+//                /Destination.second,
+//                 action: /Destination.Action.second,
+//                 then: Second.init
+//            )
+//    }
 
     var forEachReducers: some ReducerProtocol<Destination, Destination.Action> {
         Scope(

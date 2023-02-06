@@ -45,9 +45,9 @@ where State == NavigationState<Destination>,
       Action == NavigationAction<Destination> {
     associatedtype Destination: NavigationDestination
 
-    associatedtype IfLetReducer: ReducerProtocol<Destination, Destination.Action>
-    @ReducerBuilder<Destination, Destination.Action>
-    var ifLetReducer: IfLetReducer { get }
+//    associatedtype IfLetReducer: ReducerProtocol<Destination, Destination.Action>
+//    @ReducerBuilder<Destination, Destination.Action>
+//    var ifLetReducer: IfLetReducer { get }
 
     associatedtype ForEachReducer: ReducerProtocol<Destination, Destination.Action>
     @ReducerBuilder<Destination, Destination.Action>
