@@ -48,8 +48,10 @@ struct AppNavigation: NavigationReducerProtocol {
 
     var rootReducer = Landing()
 
-    var ifLetReducer: some ReducerProtocol<Destination?, Destination.Action> {
-        EmptyReducer()
+    func ifCaseLetReducer(
+        _ baseReducer: EmptyReducer<Destination?, Destination.Action>
+    ) -> some ReducerProtocol<Destination?, Destination.Action> {
+        baseReducer
             .ifCaseLet(
                 /Destination.first,
                  action: /Destination.Action.first,
