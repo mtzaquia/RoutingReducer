@@ -12,7 +12,7 @@ struct Landing: ReducerProtocol {
     enum Action: BindableAction {
         case binding(BindingAction<State>)
         case pushFirst
-//        case present
+        case present
     }
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -31,8 +31,8 @@ struct First: ReducerProtocol {
         case binding(BindingAction<State>)
         case pushSecond
         case popToLanding
-//        case present
-//        case dismiss
+        case present
+        case dismiss
     }
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -51,7 +51,7 @@ struct Second: ReducerProtocol {
         case binding(BindingAction<State>)
         case popToFirst
         case popToRoot
-//        case dismiss
+        case dismiss
     }
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
