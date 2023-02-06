@@ -8,6 +8,9 @@ import ComposableArchitecture
 public enum NavigationAction<Destination: NavigationDestination> {
     case navigation(Destination.NavigationAction)
     case root(Destination.RootReducer.Action)
-    case destination(Destination.ID, Destination.Action)
-    case destination2(Destination.Action)
+    case destination(Destination.ID?, Destination.Action)
+    // TODO: remove once the above can be used
+//    case destination2(Destination.Action)
+
+    static func destinationModal(_ action: Destination.Action) -> Self { .destination(nil, action) }
 }

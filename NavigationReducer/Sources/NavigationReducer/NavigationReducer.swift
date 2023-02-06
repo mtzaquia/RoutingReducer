@@ -68,7 +68,7 @@ where State == NavigationState<Destination>,
 public extension NavigationReducerProtocol {
     @ReducerBuilder<State, Action>
     var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.navigation.currentModal, action: /Action.destination2) { ifLetReducer }
+        Scope(state: \.navigation.currentModal, action: /Action.destinationModal) { ifLetReducer }
         NavigationReducer(rootReducer: rootReducer, navigationHandler: handleNavigation)
             .forEach(\.navigation.destinationPath, action: /Action.destination) { forEachReducers }
     }
