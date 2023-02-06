@@ -19,6 +19,9 @@ struct LandingView: View {
                 Button("Present") {
                     vs.send(.present)
                 }
+
+                TextField("Input", text: vs.binding(\.$landingText))
+                    .padding()
             }
         }
     }
@@ -42,11 +45,13 @@ struct FirstView: View {
                     vs.send(.present)
                 }
 
-                Spacer()
+                TextField("Input", text: vs.binding(\.$firstText))
+                    .padding()
 
                 Button("Dismiss") {
                     vs.send(.dismiss)
                 }
+                .padding(.top, 16)
             }
         }
     }
@@ -66,11 +71,13 @@ struct SecondView: View {
                     vs.send(.popToRoot)
                 }
 
-                Spacer()
+                TextField("Input", text: vs.binding(\.$secondText))
+                    .padding()
 
                 Button("Dismiss") {
                     vs.send(.dismiss)
                 }
+                .padding(.top, 16)
             }
         }
     }

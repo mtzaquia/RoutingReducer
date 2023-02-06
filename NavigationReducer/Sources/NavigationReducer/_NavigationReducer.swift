@@ -41,7 +41,7 @@ public struct _NavigationReducer<Destination: NavigationDestination>: ReducerPro
                     state.currentModal = nil
                     return .none
                 case .push(let destination):
-                    state.navigationPath.append(destination)
+                    state.navigationPath.append(destination.id)
                     state.destinationPath.append(destination)
                     return .none
                 case .pop(let toRoot):

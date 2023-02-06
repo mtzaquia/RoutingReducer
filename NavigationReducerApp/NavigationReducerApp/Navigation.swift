@@ -8,7 +8,9 @@ import NavigationReducer
 import SwiftUI
 
 enum AppDestination: NavigationDestination {
-    enum Action: Hashable {
+    typealias RootReducer = Landing
+
+    enum Action {
         case first(First.Action)
         case second(Second.Action)
     }
@@ -25,29 +27,24 @@ enum AppDestination: NavigationDestination {
 }
 
 struct AppNavigation: NavigationReducerProtocol {
-    typealias RootReducer = Landing
     typealias Destination = AppDestination
-    typealias State = NavigationState<Destination, RootReducer>
-    typealias Action = NavigationAction<Destination, RootReducer>
 
-    var body: some ReducerProtocol<State, Action> {
-        NavigationReducer(rootReducer: RootReducer()) { action in
-            switch action {
-                case .root(.push): return .push(.first(.init()))
-                case .root(.present): return .present(.first(.init()))
-                case .destination(_, .first(.push)): return .push(.second(.init()))
-                case .destination(_, .first(.pop)): return .pop()
-                case .destination(_, .first(.present)): return .present(.second(.init()))
-                case .destination(_, .second(.pop)): return .pop()
-                case .destination(_, .second(.popToRoot)): return .pop(toRoot: true)
-                default: break
-            }
-
-            return nil
+    func handleNavigation(_ action: NavigationAction<AppDestination>) -> AppDestination.NavigationAction? {
+        switch action {
+            case .root(.push): return .push(.first(.init()))
+            case .root(.present): return .present(.first(.init()))
+            case .destination(_, .first(.push)): return .push(.second(.init()))
+            case .destination(_, .first(.pop)): return .pop()
+            case .destination(_, .first(.present)): return .present(.second(.init()))
+            case .destination(_, .second(.pop)): return .pop()
+            case .destination(_, .second(.popToRoot)): return .pop(toRoot: true)
+            default: break
         }
-        .ifLet(\.navigation.currentModal, action: /Action.destination2) { ifLetReducer }
-        .forEach(\.navigation.destinationPath, action: /Action.destination) { forEachReducers }
+
+        return nil
     }
+
+    var rootReducer = Landing()
 
     var ifLetReducer: some ReducerProtocol<Destination, Destination.Action> {
         EmptyReducer()
@@ -63,7 +60,6 @@ struct AppNavigation: NavigationReducerProtocol {
             )
     }
 
-    @ReducerBuilder<Destination, Destination.Action>
     var forEachReducers: some ReducerProtocol<Destination, Destination.Action> {
         Scope(
             state: /Destination.first,
@@ -79,7 +75,7 @@ struct AppNavigation: NavigationReducerProtocol {
         }
     }
 
-    static func rootView(store: StoreOf<RootReducer>) -> some View {
+    static func rootView(store: StoreOf<Destination.RootReducer>) -> some View {
         LandingView(store: store)
     }
 

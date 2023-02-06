@@ -7,7 +7,6 @@ import SwiftUI
 import ComposableArchitecture
 
 public struct NavigationReducerUI<NavigationReducer>: View where NavigationReducer: NavigationReducerProtocol {
-
     public init(store: StoreOf<NavigationReducer>) {
         self.store = store
     }
@@ -29,8 +28,11 @@ public struct NavigationReducerUI<NavigationReducer>: View where NavigationReduc
                         action: NavigationReducer.Action.root
                     )
                 )
-                .navigationDestination(for: NavigationReducer.Destination.self) { path in
-                    navigationView(path)
+                .navigationDestination(for: NavigationReducer.Destination.ID.self) { pathId in
+                    navigationView(
+                        id: pathId,
+                        path: viewStore.state.navigation.destinationPath.first(where: { $0.id == pathId })
+                    )
                 }
             }
             .sheet(
@@ -61,11 +63,11 @@ private extension NavigationReducerUI {
         )
     }
 
-    func navigationView(_ path: NavigationReducer.Destination) -> some View {
+    func navigationView(id: NavigationReducer.Destination.ID, path: NavigationReducer.Destination?) -> some View {
         IfLetStore(
             store.scope(
                 state: { _ in path },
-                action: { NavigationReducer.Action.destination(path.id, $0) }
+                action: { NavigationReducer.Action.destination(id, $0) }
             ),
             then: NavigationReducer.destinationSwitchStore
         )
