@@ -18,6 +18,7 @@ enum AppDestination: NavigationDestination {
     case first(First.State)
     case second(Second.State)
 
+    // TODO: how to move this to state, so that the same "destination" could be pushed twice with diff state
     var id: String {
         switch self {
             case .first: return "first"
@@ -32,14 +33,14 @@ struct AppNavigation: NavigationReducerProtocol {
     func handleNavigation(_ action: NavigationAction<AppDestination>) -> AppDestination.NavigationAction? {
         switch action {
             case .root(.pushFirst): return .push(.first(First.State()))
-            case .root(.present): return .present(.first(.init()))
+//            case .root(.present): return .present(.first(.init()))
             case .destination(_, .first(.pushSecond)): return .push(.second(Second.State()))
             case .destination(_, .first(.popToLanding)): return .pop()
-            case .destination(_, .first(.present)): return .present(.second(.init()))
-            case .destination(_, .first(.dismiss)): return .dismiss
+//            case .destination(_, .first(.present)): return .present(.second(.init()))
+//            case .destination(_, .first(.dismiss)): return .dismiss
             case .destination(_, .second(.popToFirst)): return .pop()
             case .destination(_, .second(.popToRoot)): return .pop(toRoot: true)
-            case .destination(_, .second(.dismiss)): return .dismiss
+//            case .destination(_, .second(.dismiss)): return .dismiss
             default: break
         }
 
@@ -48,21 +49,21 @@ struct AppNavigation: NavigationReducerProtocol {
 
     var rootReducer = Landing()
 
-    func ifCaseLetReducer(
-        _ baseReducer: EmptyReducer<Destination?, Destination.Action>
-    ) -> some ReducerProtocol<Destination?, Destination.Action> {
-        baseReducer
-            .ifCaseLet(
-                /Destination.first,
-                 action: /Destination.Action.first,
-                 then: First.init
-            )
-            .ifCaseLet(
-                /Destination.second,
-                 action: /Destination.Action.second,
-                 then: Second.init
-            )
-    }
+//    func ifCaseLetReducer(
+//        _ baseReducer: EmptyReducer<Destination?, Destination.Action>
+//    ) -> some ReducerProtocol<Destination?, Destination.Action> {
+//        baseReducer
+//            .ifCaseLet(
+//                /Destination.first,
+//                 action: /Destination.Action.first,
+//                 then: First.init
+//            )
+//            .ifCaseLet(
+//                /Destination.second,
+//                 action: /Destination.Action.second,
+//                 then: Second.init
+//            )
+//    }
 
     var forEachReducers: some ReducerProtocol<Destination, Destination.Action> {
         Scope(
@@ -78,7 +79,11 @@ struct AppNavigation: NavigationReducerProtocol {
             Second()
         }
     }
+}
 
+// MARK: - View conformances, maybe deserve their own protocol...
+
+extension AppNavigation {
     static func rootView(store: StoreOf<Destination.RootReducer>) -> some View {
         LandingView(store: store)
     }

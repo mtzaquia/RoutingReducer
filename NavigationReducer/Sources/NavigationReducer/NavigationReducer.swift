@@ -45,9 +45,9 @@ where State == NavigationState<Destination>,
       Action == NavigationAction<Destination> {
     associatedtype Destination: NavigationDestination
 
-    associatedtype IfLetReducer: ReducerProtocol<Destination?, Destination.Action>
-    @ReducerBuilder<Destination?, Destination.Action>
-    func ifCaseLetReducer(_ baseReducer: EmptyReducer<Destination?, Destination.Action>) -> IfLetReducer
+//    associatedtype IfLetReducer: ReducerProtocol<Destination?, Destination.Action>
+//    @ReducerBuilder<Destination?, Destination.Action>
+//    func ifCaseLetReducer(_ baseReducer: EmptyReducer<Destination?, Destination.Action>) -> IfLetReducer
 
     associatedtype ForEachReducer: ReducerProtocol<Destination, Destination.Action>
     @ReducerBuilder<Destination, Destination.Action>
@@ -68,7 +68,7 @@ where State == NavigationState<Destination>,
 public extension NavigationReducerProtocol {
     @ReducerBuilder<State, Action>
     var body: some ReducerProtocol<State, Action> {
-        Scope(state: \.navigation.currentModal, action: /Action.destinationModal) { ifCaseLetReducer(EmptyReducer()) }
+//        Scope(state: \.navigation.currentModal, action: /Action.destinationModal) { ifCaseLetReducer(EmptyReducer()) }
         NavigationReducer(rootReducer: rootReducer, navigationHandler: handleNavigation)
             .forEach(\.navigation.destinationPath, action: /Action.destination) { forEachReducers }
     }

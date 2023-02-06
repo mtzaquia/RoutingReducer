@@ -28,24 +28,22 @@ public struct NavigationReducerUI<NavigationReducer>: View where NavigationReduc
                         action: NavigationReducer.Action.root
                     )
                 )
-                .navigationDestination(for: NavigationReducer.Destination.ID.self) { pathId in
-                    navigationView(
-                        id: pathId,
-                        path: viewStore.state.navigation.destinationPath.first(where: { $0.id == pathId })
-                    )
-                }
+                .navigationDestination(
+                    for: NavigationReducer.Destination.ID.self,
+                    destination: navigationView(id:)
+                )
             }
-            .sheet(
-                isPresented: .init(get: {
-                    viewStore.navigation.currentModal != nil
-                }, set: {
-                    if !$0 {
-                        viewStore.send(.navigation(.dismiss))
-                    }
-                })
-            ) {
-                modalView(viewStore.navigation.currentModal!)
-            }
+//            .sheet(
+//                isPresented: .init(get: {
+//                    viewStore.navigation.currentModal != nil
+//                }, set: {
+//                    if !$0 {
+//                        viewStore.send(.navigation(.dismiss))
+//                    }
+//                })
+//            ) {
+//                modalView(viewStore.navigation.currentModal!)
+//            }
         }
     }
 }
@@ -53,20 +51,20 @@ public struct NavigationReducerUI<NavigationReducer>: View where NavigationReduc
 // MARK: - Private resolutions
 
 private extension NavigationReducerUI {
-    func modalView(_ path: NavigationReducer.Destination) -> some View {
-        IfLetStore(
-            store.scope(
-                state: \.navigation.currentModal,
-                action: { NavigationReducer.Action.destination(path.id, $0) }
-            ),
-            then: NavigationReducer.destinationSwitchStore
-        )
-    }
+//    func modalView(_ path: NavigationReducer.Destination) -> some View {
+//        IfLetStore(
+//            store.scope(
+//                state: \.navigation.currentModal,
+//                action: { NavigationReducer.Action.destination(path.id, $0) }
+//            ),
+//            then: NavigationReducer.destinationSwitchStore
+//        )
+//    }
 
-    func navigationView(id: NavigationReducer.Destination.ID, path: NavigationReducer.Destination?) -> some View {
+    func navigationView(id: NavigationReducer.Destination.ID) -> some View {
         IfLetStore(
             store.scope(
-                state: { _ in path },
+                state: { $0.navigation.destinationPath.first(where: { $0.id == id }) },
                 action: { NavigationReducer.Action.destination(id, $0) }
             ),
             then: NavigationReducer.destinationSwitchStore
