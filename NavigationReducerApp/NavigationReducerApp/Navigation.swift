@@ -31,12 +31,12 @@ struct AppNavigation: NavigationReducerProtocol {
 
     func handleNavigation(_ action: NavigationAction<AppDestination>) -> AppDestination.NavigationAction? {
         switch action {
-            case .root(.push): return .push(.first(.init()))
+            case .root(.pushFirst): return .push(.first(First.State()))
 //            case .root(.present): return .present(.first(.init()))
-            case .destination(_, .first(.push)): return .push(.second(.init()))
-            case .destination(_, .first(.pop)): return .pop()
+            case .destination(_, .first(.pushSecond)): return .push(.second(Second.State()))
+            case .destination(_, .first(.popToLanding)): return .pop()
 //            case .destination(_, .first(.present)): return .present(.second(.init()))
-            case .destination(_, .second(.pop)): return .pop()
+            case .destination(_, .second(.popToFirst)): return .pop()
             case .destination(_, .second(.popToRoot)): return .pop(toRoot: true)
             default: break
         }

@@ -53,15 +53,15 @@ public struct NavigationReducerUI<NavigationReducer>: View where NavigationReduc
 // MARK: - Private resolutions
 
 private extension NavigationReducerUI {
-    func modalView(_ path: NavigationReducer.Destination) -> some View {
-        IfLetStore(
-            store.scope(
-                state: \.navigation.currentModal,
-                action: { NavigationReducer.Action.destination(path.id, $0) }
-            ),
-            then: NavigationReducer.destinationSwitchStore
-        )
-    }
+//    func modalView(_ path: NavigationReducer.Destination) -> some View {
+//        IfLetStore(
+//            store.scope(
+//                state: \.navigation.currentModal,
+//                action: { NavigationReducer.Action.destination(path.id, $0) }
+//            ),
+//            then: NavigationReducer.destinationSwitchStore
+//        )
+//    }
 
     func navigationView(id: NavigationReducer.Destination.ID, path: NavigationReducer.Destination?) -> some View {
         IfLetStore(

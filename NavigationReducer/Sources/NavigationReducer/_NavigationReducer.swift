@@ -10,22 +10,22 @@ public struct _NavigationReducer<Destination: NavigationDestination>: ReducerPro
     public struct State: Equatable {
         @BindingState var navigationPath: NavigationPath
         public var destinationPath: IdentifiedArrayOf<Destination>
-        public var currentModal: Destination?
+//        public var currentModal: Destination?
 
         public init(
-            destinationPath: IdentifiedArrayOf<Destination> = .init(),
-            currentModal: Destination? = nil
+            destinationPath: IdentifiedArrayOf<Destination> = .init()//,
+//            currentModal: Destination? = nil
         ) {
             navigationPath = .init(destinationPath.elements)
             self.destinationPath = destinationPath
-            self.currentModal = currentModal
+//            self.currentModal = currentModal
         }
     }
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
-        case present(Destination)
-        case dismiss
+//        case present(Destination)
+//        case dismiss
         case push(Destination)
         case pop(toRoot: Bool = false)
     }
@@ -34,12 +34,12 @@ public struct _NavigationReducer<Destination: NavigationDestination>: ReducerPro
         BindingReducer()
         Reduce { state, action in
             switch action {
-                case .present(let destination):
-                    state.currentModal = destination
-                    return .none
-                case .dismiss:
-                    state.currentModal = nil
-                    return .none
+//                case .present(let destination):
+//                    state.currentModal = destination
+//                    return .none
+//                case .dismiss:
+//                    state.currentModal = nil
+//                    return .none
                 case .push(let destination):
                     state.navigationPath.append(destination.id)
                     state.destinationPath.append(destination)
@@ -52,7 +52,12 @@ public struct _NavigationReducer<Destination: NavigationDestination>: ReducerPro
                         toRoot ? state.destinationPath.count : min(state.destinationPath.count, 1)
                     )
                     return .none
-                case .binding:
+                case .binding(let action):
+                    let difference = state.destinationPath.count - state.navigationPath.count
+                    if action.keyPath == \.$navigationPath, difference > 0 {
+                        state.destinationPath.removeLast(difference)
+                    }
+
                     return .none
             }
         }

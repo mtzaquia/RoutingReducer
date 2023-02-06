@@ -13,7 +13,7 @@ struct LandingView: View {
             VStack {
                 Text("Landing")
                 Button("Push") {
-                    vs.send(.push)
+                    vs.send(.pushFirst)
                 }
 
 //                Button("Present") {
@@ -34,11 +34,11 @@ struct FirstView: View {
             VStack {
                 Text("First")
                 Button("Push") {
-                    vs.send(.push)
+                    vs.send(.pushSecond)
                 }
 
                 Button("Pop") {
-                    vs.send(.pop)
+                    vs.send(.popToLanding)
                 }
 
 //                Button("Present") {
@@ -64,7 +64,7 @@ struct SecondView: View {
             VStack {
                 Text("Second")
                 Button("Pop") {
-                    vs.send(.pop)
+                    vs.send(.popToFirst)
                 }
 
                 Button("Pop to root") {
