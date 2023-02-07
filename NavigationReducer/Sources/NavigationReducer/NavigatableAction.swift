@@ -5,11 +5,8 @@
 
 import ComposableArchitecture
 
-public enum NavigationAction<Route: NavigationRoute> {
-    case navigation(Route.NavigationAction)
-    case root(Route.RootReducer.Action)
-    // TODO: With an optional ID, BindingReducers do not work within destination reducers...
-    case route(Route.ID, Route.Action)
-    // ... so how to accomplish this?
-//    static func destinationModal(_ action: Route.Action) -> Self { .destination(nil, action) }
+public protocol RoutingAction {
+    associatedtype Route: Routing
+    static func navigation(_ action: _RoutingReducer<Route>.Action) -> Self
+    static func route(_ id: Route.ID, _ action: Route.Action) -> Self
 }

@@ -11,12 +11,13 @@ import NavigationReducer
 struct NavigationReducerApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationReducerUI<AppNavigation>(
-                store: .init(
-                    initialState: .init(root: .init()),
-                    reducer: AppNavigation()._printChanges()
-                )
-            )
+//            NavigationReducerUI<AppNavigation>(
+//                store: .init(
+//                    initialState: .init(root: .init()),
+//                    reducer: AppNavigation()._printChanges()
+//                )
+//            )
+            EmptyView()
         }
     }
 }

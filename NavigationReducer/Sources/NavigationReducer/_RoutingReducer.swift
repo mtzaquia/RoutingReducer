@@ -6,26 +6,21 @@
 import struct SwiftUI.NavigationPath
 import ComposableArchitecture
 
-public struct _NavigationReducer<Route: NavigationRoute>: ReducerProtocol {
+public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
     public struct State: Equatable {
         @BindingState var navigationPath: NavigationPath
         public var routePath: IdentifiedArrayOf<Route>
-//        public var currentModal: Route?
 
         public init(
-            routePath: IdentifiedArrayOf<Route> = .init()//,
-//            currentModal: Route? = nil
+            routePath: IdentifiedArrayOf<Route> = .init()
         ) {
-            navigationPath = .init(routePath.elements)
+            self.navigationPath = .init(routePath.elements)
             self.routePath = routePath
-//            self.currentModal = currentModal
         }
     }
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
-//        case present(Route)
-//        case dismiss
         case push(Route)
         case pop(toRoot: Bool = false)
     }
@@ -34,12 +29,6 @@ public struct _NavigationReducer<Route: NavigationRoute>: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-//                case .present(let destination):
-//                    state.currentModal = destination
-//                    return .none
-//                case .dismiss:
-//                    state.currentModal = nil
-//                    return .none
                 case .push(let route):
                     state.navigationPath.append(route.id)
                     state.routePath.append(route)

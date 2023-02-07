@@ -5,17 +5,9 @@
 
 import ComposableArchitecture
 
-public struct NavigationState<Route: NavigationRoute>: Equatable {
-    public var navigation: Route.NavigationState
-    var root: Route.RootReducer.State
-
-    public init(
-        navigation: Route.NavigationState = .init(),
-        root: Route.RootReducer.State
-    ) {
-        self.navigation = navigation
-        self.root = root
-    }
+public protocol RoutingState: Equatable {
+    associatedtype Route: Routing
+    var navigation: _RoutingReducer<Route>.State { get set }
 }
 
-
+public protocol RoutedState: Equatable, Hashable, Identifiable {}

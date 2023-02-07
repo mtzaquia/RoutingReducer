@@ -5,10 +5,7 @@
 
 import ComposableArchitecture
 
-public protocol NavigationRoute: Hashable, Identifiable {
-    typealias NavigationState = _NavigationReducer<Self>.State
-    typealias NavigationAction = _NavigationReducer<Self>.Action
-
+public protocol Routing: Equatable, Hashable, Identifiable {
     associatedtype Action
-    associatedtype RootReducer: ReducerProtocol where RootReducer.State: Equatable
 }
+
