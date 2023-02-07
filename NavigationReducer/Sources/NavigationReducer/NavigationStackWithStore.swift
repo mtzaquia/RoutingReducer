@@ -52,7 +52,7 @@ public struct NavigationStackWithStore<Reducer: RoutingReducerProtocol, Root: Vi
             ) {
                 IfLetStore(
                     store.scope(
-                        state: \.navigation.currentModal,
+                        state: replayNonNil(\.navigation.currentModal),
                         action: Reducer.Action.modalRoute
                     ),
                     then: routeViews

@@ -7,7 +7,7 @@ import struct SwiftUI.NavigationPath
 import ComposableArchitecture
 
 public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Hashable {
         @BindingState var navigationPath: NavigationPath
         var routePath: IdentifiedArrayOf<Route>
         var currentModal: Route?
@@ -19,6 +19,11 @@ public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
             self.navigationPath = .init(routePath.elements.map(\.id))
             self.routePath = routePath
             self.currentModal = currentModal
+        }
+
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(routePath)
+            hasher.combine(currentModal)
         }
     }
 

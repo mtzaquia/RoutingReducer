@@ -5,7 +5,7 @@
 
 import ComposableArchitecture
 
-public protocol RoutingState: Equatable {
+public protocol RoutingState: Identifiable, Hashable, Equatable {
     associatedtype Route: Routing
     var navigation: Route.NavigationState { get set }
 }
