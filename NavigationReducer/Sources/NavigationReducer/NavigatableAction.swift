@@ -5,11 +5,11 @@
 
 import ComposableArchitecture
 
-public enum NavigationAction<Destination: NavigationDestination> {
-    case navigation(Destination.NavigationAction)
-    case root(Destination.RootReducer.Action)
+public enum NavigationAction<Route: NavigationRoute> {
+    case navigation(Route.NavigationAction)
+    case root(Route.RootReducer.Action)
     // TODO: With an optional ID, BindingReducers do not work within destination reducers...
-    case destination(Destination.ID, Destination.Action)
+    case route(Route.ID, Route.Action)
     // ... so how to accomplish this?
-//    static func destinationModal(_ action: Destination.Action) -> Self { .destination(nil, action) }
+//    static func destinationModal(_ action: Route.Action) -> Self { .destination(nil, action) }
 }

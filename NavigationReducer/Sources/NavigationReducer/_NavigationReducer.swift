@@ -6,27 +6,27 @@
 import struct SwiftUI.NavigationPath
 import ComposableArchitecture
 
-public struct _NavigationReducer<Destination: NavigationDestination>: ReducerProtocol {
+public struct _NavigationReducer<Route: NavigationRoute>: ReducerProtocol {
     public struct State: Equatable {
         @BindingState var navigationPath: NavigationPath
-        public var destinationPath: IdentifiedArrayOf<Destination>
-//        public var currentModal: Destination?
+        public var routePath: IdentifiedArrayOf<Route>
+//        public var currentModal: Route?
 
         public init(
-            destinationPath: IdentifiedArrayOf<Destination> = .init()//,
-//            currentModal: Destination? = nil
+            routePath: IdentifiedArrayOf<Route> = .init()//,
+//            currentModal: Route? = nil
         ) {
-            navigationPath = .init(destinationPath.elements)
-            self.destinationPath = destinationPath
+            navigationPath = .init(routePath.elements)
+            self.routePath = routePath
 //            self.currentModal = currentModal
         }
     }
 
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
-//        case present(Destination)
+//        case present(Route)
 //        case dismiss
-        case push(Destination)
+        case push(Route)
         case pop(toRoot: Bool = false)
     }
 
@@ -40,22 +40,22 @@ public struct _NavigationReducer<Destination: NavigationDestination>: ReducerPro
 //                case .dismiss:
 //                    state.currentModal = nil
 //                    return .none
-                case .push(let destination):
-                    state.navigationPath.append(destination.id)
-                    state.destinationPath.append(destination)
+                case .push(let route):
+                    state.navigationPath.append(route.id)
+                    state.routePath.append(route)
                     return .none
                 case .pop(let toRoot):
                     state.navigationPath.removeLast(
                         toRoot ? state.navigationPath.count : min(state.navigationPath.count, 1)
                     )
-                    state.destinationPath.removeLast(
-                        toRoot ? state.destinationPath.count : min(state.destinationPath.count, 1)
+                    state.routePath.removeLast(
+                        toRoot ? state.routePath.count : min(state.routePath.count, 1)
                     )
                     return .none
                 case .binding(let action):
-                    let difference = state.destinationPath.count - state.navigationPath.count
+                    let difference = state.routePath.count - state.navigationPath.count
                     if action.keyPath == \.$navigationPath, difference > 0 {
-                        state.destinationPath.removeLast(difference)
+                        state.routePath.removeLast(difference)
                     }
 
                     return .none

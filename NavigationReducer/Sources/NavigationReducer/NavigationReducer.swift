@@ -7,17 +7,17 @@ import protocol SwiftUI.View
 import ComposableArchitecture
 
 public struct NavigationReducer<
-    Destination: NavigationDestination
+    Route: NavigationRoute
 >: ReducerProtocol {
-    public typealias State = NavigationState<Destination>
-    public typealias Action = NavigationAction<Destination>
+    public typealias State = NavigationState<Route>
+    public typealias Action = NavigationAction<Route>
 
-    public let rootReducer: Destination.RootReducer
-    public let navigationHandler: (Action) -> Destination.NavigationAction?
+    public let rootReducer: Route.RootReducer
+    public let navigationHandler: (Action) -> Route.NavigationAction?
 
     public init(
-        rootReducer: Destination.RootReducer,
-        navigationHandler: @escaping (Action) -> Destination.NavigationAction?
+        rootReducer: Route.RootReducer,
+        navigationHandler: @escaping (Action) -> Route.NavigationAction?
     ) {
         self.rootReducer = rootReducer
         self.navigationHandler = navigationHandler
@@ -41,27 +41,27 @@ public struct NavigationReducer<
 }
 
 public protocol NavigationReducerProtocol: ReducerProtocol
-where State == NavigationState<Destination>,
-      Action == NavigationAction<Destination> {
-    associatedtype Destination: NavigationDestination
+where State == NavigationState<Route>,
+      Action == NavigationAction<Route> {
+    associatedtype Route: NavigationRoute
 
-//    associatedtype IfLetReducer: ReducerProtocol<Destination?, Destination.Action>
-//    @ReducerBuilder<Destination?, Destination.Action>
-//    func ifCaseLetReducer(_ baseReducer: EmptyReducer<Destination?, Destination.Action>) -> IfLetReducer
+//    associatedtype IfLetReducer: ReducerProtocol<Route?, Route.Action>
+//    @ReducerBuilder<Route?, Route.Action>
+//    func ifCaseLetReducer(_ baseReducer: EmptyReducer<Route?, Route.Action>) -> IfLetReducer
 
-    associatedtype ForEachReducer: ReducerProtocol<Destination, Destination.Action>
-    @ReducerBuilder<Destination, Destination.Action>
+    associatedtype ForEachReducer: ReducerProtocol<Route, Route.Action>
+    @ReducerBuilder<Route, Route.Action>
     var forEachReducers: ForEachReducer { get }
 
-    func handleNavigation(_ action: NavigationAction<Destination>) -> Destination.NavigationAction?
-    var rootReducer: Destination.RootReducer { get }
+    func handleNavigation(_ action: NavigationAction<Route>) -> Route.NavigationAction?
+    var rootReducer: Route.RootReducer { get }
 
     associatedtype RootView: View
     associatedtype SwitchView: View
 
-    static func rootView(store: StoreOf<Destination.RootReducer>) -> RootView
+    static func rootView(store: StoreOf<Route.RootReducer>) -> RootView
     static func destinationSwitchStore(
-        store: Store<Destination, Destination.Action>
+        store: Store<Route, Route.Action>
     ) -> SwitchView
 }
 
@@ -70,6 +70,6 @@ public extension NavigationReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
 //        Scope(state: \.navigation.currentModal, action: /Action.destinationModal) { ifCaseLetReducer(EmptyReducer()) }
         NavigationReducer(rootReducer: rootReducer, navigationHandler: handleNavigation)
-            .forEach(\.navigation.destinationPath, action: /Action.destination) { forEachReducers }
+            .forEach(\.navigation.routePath, action: /Action.route) { forEachReducers }
     }
 }

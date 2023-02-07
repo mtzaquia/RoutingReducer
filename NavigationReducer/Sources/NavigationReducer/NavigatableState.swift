@@ -5,13 +5,13 @@
 
 import ComposableArchitecture
 
-public struct NavigationState<Destination: NavigationDestination>: Equatable {
-    public var navigation: Destination.NavigationState
-    var root: Destination.RootReducer.State
+public struct NavigationState<Route: NavigationRoute>: Equatable {
+    public var navigation: Route.NavigationState
+    var root: Route.RootReducer.State
 
     public init(
-        navigation: Destination.NavigationState = .init(),
-        root: Destination.RootReducer.State
+        navigation: Route.NavigationState = .init(),
+        root: Route.RootReducer.State
     ) {
         self.navigation = navigation
         self.root = root

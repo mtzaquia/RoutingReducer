@@ -5,7 +5,7 @@
 
 import ComposableArchitecture
 
-public protocol NavigationDestination: Hashable, Identifiable {
+public protocol NavigationRoute: Hashable, Identifiable {
     typealias NavigationState = _NavigationReducer<Self>.State
     typealias NavigationAction = _NavigationReducer<Self>.Action
 

@@ -7,7 +7,7 @@ import ComposableArchitecture
 import NavigationReducer
 import SwiftUI
 
-enum AppDestination: NavigationDestination {
+enum AppRoute: NavigationRoute {
     typealias RootReducer = Landing
 
     enum Action {
@@ -28,18 +28,18 @@ enum AppDestination: NavigationDestination {
 }
 
 struct AppNavigation: NavigationReducerProtocol {
-    typealias Destination = AppDestination
+    typealias Route = AppRoute
 
-    func handleNavigation(_ action: NavigationAction<AppDestination>) -> AppDestination.NavigationAction? {
+    func handleNavigation(_ action: NavigationAction<AppRoute>) -> AppRoute.NavigationAction? {
         switch action {
             case .root(.pushFirst): return .push(.first(First.State()))
 //            case .root(.present): return .present(.first(.init()))
-            case .destination(_, .first(.pushSecond)): return .push(.second(Second.State()))
-            case .destination(_, .first(.popToLanding)): return .pop()
+            case .route(_, .first(.pushSecond)): return .push(.second(Second.State()))
+            case .route(_, .first(.popToLanding)): return .pop()
 //            case .destination(_, .first(.present)): return .present(.second(.init()))
 //            case .destination(_, .first(.dismiss)): return .dismiss
-            case .destination(_, .second(.popToFirst)): return .pop()
-            case .destination(_, .second(.popToRoot)): return .pop(toRoot: true)
+            case .route(_, .second(.popToFirst)): return .pop()
+            case .route(_, .second(.popToRoot)): return .pop(toRoot: true)
 //            case .destination(_, .second(.dismiss)): return .dismiss
             default: break
         }
@@ -50,31 +50,31 @@ struct AppNavigation: NavigationReducerProtocol {
     var rootReducer = Landing()
 
 //    func ifCaseLetReducer(
-//        _ baseReducer: EmptyReducer<Destination?, Destination.Action>
-//    ) -> some ReducerProtocol<Destination?, Destination.Action> {
+//        _ baseReducer: EmptyReducer<Route?, Route.Action>
+//    ) -> some ReducerProtocol<Route?, Route.Action> {
 //        baseReducer
 //            .ifCaseLet(
-//                /Destination.first,
-//                 action: /Destination.Action.first,
+//                /Route.first,
+//                 action: /Route.Action.first,
 //                 then: First.init
 //            )
 //            .ifCaseLet(
-//                /Destination.second,
-//                 action: /Destination.Action.second,
+//                /Route.second,
+//                 action: /Route.Action.second,
 //                 then: Second.init
 //            )
 //    }
 
-    var forEachReducers: some ReducerProtocol<Destination, Destination.Action> {
+    var forEachReducers: some ReducerProtocol<Route, Route.Action> {
         Scope(
-            state: /Destination.first,
-            action: /Destination.Action.first
+            state: /Route.first,
+            action: /Route.Action.first
         ) {
             First()
         }
         Scope(
-            state: /Destination.second,
-            action: /Destination.Action.second
+            state: /Route.second,
+            action: /Route.Action.second
         ) {
             Second()
         }
@@ -84,22 +84,22 @@ struct AppNavigation: NavigationReducerProtocol {
 // MARK: - View conformances, maybe deserve their own protocol...
 
 extension AppNavigation {
-    static func rootView(store: StoreOf<Destination.RootReducer>) -> some View {
+    static func rootView(store: StoreOf<Route.RootReducer>) -> some View {
         LandingView(store: store)
     }
 
     static func destinationSwitchStore(
-        store: Store<Destination, Destination.Action>
+        store: Store<Route, Route.Action>
     ) -> some View {
         SwitchStore(store) {
             CaseLet(
-                state: /Destination.first,
-                action: Destination.Action.first,
+                state: /Route.first,
+                action: Route.Action.first,
                 then: FirstView.init
             )
             CaseLet(
-                state: /Destination.second,
-                action: Destination.Action.second,
+                state: /Route.second,
+                action: Route.Action.second,
                 then: SecondView.init
             )
         }
