@@ -11,13 +11,26 @@ import NavigationReducer
 struct NavigationReducerApp: App {
     var body: some Scene {
         WindowGroup {
-//            NavigationReducerUI<AppNavigation>(
-//                store: .init(
-//                    initialState: .init(root: .init()),
-//                    reducer: AppNavigation()._printChanges()
-//                )
-//            )
-            EmptyView()
+            NavigationStackWithStore<Landing, _, _>(
+                store: .init(
+                    initialState: .init(),
+                    reducer: Landing()
+                ),
+                rootView: LandingView.init
+            ) { store in
+                    SwitchStore(store) {
+                        CaseLet(
+                            state: /AppRoute.first,
+                            action: AppRoute.RouteAction.first,
+                            then: FirstView.init
+                        )
+                        CaseLet(
+                            state: /AppRoute.second,
+                            action: AppRoute.RouteAction.second,
+                            then: SecondView.init
+                        )
+                    }
+                }
         }
     }
 }

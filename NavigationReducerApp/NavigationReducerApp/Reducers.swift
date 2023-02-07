@@ -7,54 +7,44 @@ import Foundation
 import ComposableArchitecture
 import NavigationReducer
 
-struct Landing: ReducerProtocol {
+struct Landing: RoutingReducerProtocol {
     struct State: RoutingState {
-        var navigation: _RoutingReducer<AppRoute>.State
+        var navigation: AppRoute.NavigationState = .init()
         @BindingState var landingText: String = ""
     }
     enum Action: RoutingAction, BindableAction {
-        case navigation(_RoutingReducer<AppRoute>.Action)
-        case route(UUID, AppRoute.Action)
+        case navigation(AppRoute.NavigationAction)
+        case route(UUID, AppRoute.RouteAction)
         case binding(BindingAction<State>)
 
         case pushFirst
     }
     var body: some ReducerProtocol<State, Action> {
+        // TODO: Figure out why autocomplete isn't working
         Router { action in
             switch action {
-                case .pushFirst: return .pop()
-                case .route: return .push(.first(.init()))
+                case .pushFirst: return .push(.first(.init()))
+                case .route(_, .first(.popToLanding)): return .pop()
                 default: return nil
             }
-        }
-        BindingReducer()
-        Reduce { state, action in
-            print("Landing", action)
-            return .none
-        }
-        .forEach(\.navigation.routePath, action: /Action.route) {
+        } routeReducer: {
             Scope(
                 state: /AppRoute.first,
-                action: /AppRoute.Action.first,
+                action: /AppRoute.RouteAction.first,
                 First.init
             )
             Scope(
                 state: /AppRoute.second,
-                action: /AppRoute.Action.second,
+                action: /AppRoute.RouteAction.second,
                 Second.init
             )
         }
+        BindingReducer()
+        Reduce { state, action in
+            return .none
+        }
     }
 }
-
-//extension ReducerProtocol where State: RoutingState, Action: RoutingAction {
-//    @inlinable
-//    func routing<Element>(
-//        @ReducerBuilder<State.Route, Action.Route> _ element: () -> Element
-//    ) -> _ForEachReducer<Self, State.Route.ID, Element> where Element: ReducerProtocol<State, Action> {
-//        forEach(\.navigation.routePath, action: /Action.route, element)
-//    }
-//}
 
 struct First: ReducerProtocol {
     struct State: RoutedState {
@@ -71,7 +61,6 @@ struct First: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
-            print("First", action)
             return .none
         }
     }
@@ -91,7 +80,6 @@ struct Second: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
-            print("Second", action)
             return .none
         }
     }
