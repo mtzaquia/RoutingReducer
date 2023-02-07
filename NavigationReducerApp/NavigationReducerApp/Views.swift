@@ -5,6 +5,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import NavigationReducer
 
 struct LandingView: View {
     let store: StoreOf<Landing>
@@ -17,7 +18,7 @@ struct LandingView: View {
                 }
 
                 Button("Present") {
-                    vs.send(.presentFirst)
+                    vs.send(.presentLanding)
                 }
 
                 TextField("Input", text: vs.binding(\.$landingText))
@@ -78,6 +79,45 @@ struct SecondView: View {
                     vs.send(.dismiss)
                 }
                 .padding(.top, 16)
+            }
+        }
+    }
+}
+
+// MARK: -
+
+struct ModalLandingView: View {
+    let store: StoreOf<ModalLanding>
+    var body: some View {
+        NavigationStackWithStore<ModalLanding, _, _>(
+            store: .init(
+                initialState: .init(),
+                reducer: ModalLanding()
+            )
+        ) { store in
+            WithViewStore(store) { vs in
+                VStack {
+                    Text("Modal landing")
+                    Button("Present") {
+                        vs.send(.presentOtherModal)
+                    }
+
+                    TextField("Input", text: vs.binding(\.$modalText))
+                        .padding()
+
+                    Button("Dismiss") {
+                        vs.send(.dismiss)
+                    }
+                    .padding(.top, 16)
+                }
+            }
+        } routeViews: { store in
+            SwitchStore(store) {
+                CaseLet(
+                    state: /ModalRoute.first,
+                    action: ModalRoute.RouteAction.first,
+                    then: FirstView.init
+                )
             }
         }
     }

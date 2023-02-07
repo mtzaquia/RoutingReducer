@@ -9,6 +9,7 @@ import NavigationReducer
 
 struct Landing: RoutingReducerProtocol {
     struct State: RoutingState {
+        let id = UUID()
         var navigation: AppRoute.NavigationState = .init()
         @BindingState var landingText: String = ""
     }
@@ -19,15 +20,16 @@ struct Landing: RoutingReducerProtocol {
         case binding(BindingAction<State>)
 
         case pushFirst
-        case presentFirst
+        case presentLanding
     }
     var body: some ReducerProtocol<State, Action> {
         Router { action in
             switch action {
                 // TODO: Figure out why autocomplete isn't working
                 case .pushFirst: return .push(.first(.init()))
-                case .presentFirst: return .present(.first(.init()))
+                case .presentLanding: return .present(.modalLanding(.init()))
                 case .modalRoute(.first(.dismiss)): return .dismiss
+                case .modalRoute(.modalLanding(.dismiss)): return .dismiss
                 case .route(_, .first(.pushSecond)): return .push(.second(.init()))
                 case .route(_, .first(.popToLanding)): return .pop()
                 case .route(_, .second(.popToFirst)): return .pop()
@@ -44,6 +46,11 @@ struct Landing: RoutingReducerProtocol {
                 state: /AppRoute.second,
                 action: /AppRoute.RouteAction.second,
                 Second.init
+            )
+            Scope(
+                state: /AppRoute.modalLanding,
+                action: /AppRoute.RouteAction.modalLanding,
+                ModalLanding.init
             )
         }
         BindingReducer()
@@ -85,6 +92,44 @@ struct Second: ReducerProtocol {
         case dismiss
     }
     var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            return .none
+        }
+    }
+}
+
+struct ModalLanding: RoutingReducerProtocol {
+    struct State: RoutingState {
+        let id = UUID()
+        var navigation: ModalRoute.NavigationState = .init()
+        @BindingState var modalText: String = ""
+    }
+    enum Action: RoutingAction, BindableAction {
+        case navigation(ModalRoute.NavigationAction)
+        case route(ModalRoute.ID, ModalRoute.RouteAction)
+        case modalRoute(ModalRoute.RouteAction)
+        case binding(BindingAction<State>)
+
+        case presentOtherModal
+        case dismiss
+    }
+    var body: some ReducerProtocol<State, Action> {
+        Router { action in
+            switch action {
+                case .presentOtherModal: return .present(.first(.init()))
+                case .modalRoute(.first(.dismiss)): return .dismiss
+                default: break
+            }
+
+            return nil
+        } routeReducer: {
+            Scope(
+                state: /ModalRoute.first,
+                action: /ModalRoute.RouteAction.first,
+                First.init
+            )
+        }
         BindingReducer()
         Reduce { state, action in
             return .none

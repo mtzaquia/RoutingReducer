@@ -29,6 +29,11 @@ struct NavigationReducerApp: App {
                             action: AppRoute.RouteAction.second,
                             then: SecondView.init
                         )
+                        CaseLet(
+                            state: /AppRoute.modalLanding,
+                            action: AppRoute.RouteAction.modalLanding,
+                            then: ModalLandingView.init
+                        )
                     }
                 }
         }
