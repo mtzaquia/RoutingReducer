@@ -14,7 +14,7 @@ public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
         public init(
             routePath: IdentifiedArrayOf<Route> = .init()
         ) {
-            self.navigationPath = .init(routePath.elements)
+            self.navigationPath = .init(routePath.elements.map(\.id))
             self.routePath = routePath
         }
     }

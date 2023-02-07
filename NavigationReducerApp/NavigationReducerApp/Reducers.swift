@@ -20,11 +20,14 @@ struct Landing: RoutingReducerProtocol {
         case pushFirst
     }
     var body: some ReducerProtocol<State, Action> {
-        // TODO: Figure out why autocomplete isn't working
         Router { action in
             switch action {
+                // TODO: Figure out why autocomplete isn't working
                 case .pushFirst: return .push(.first(.init()))
+                case .route(_, .first(.pushSecond)): return .push(.second(.init()))
                 case .route(_, .first(.popToLanding)): return .pop()
+                case .route(_, .second(.popToFirst)): return .pop()
+                case .route(_, .second(.popToRoot)): return .pop(toRoot: true)
                 default: return nil
             }
         } routeReducer: {
