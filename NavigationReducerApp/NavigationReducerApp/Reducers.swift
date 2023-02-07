@@ -15,15 +15,19 @@ struct Landing: RoutingReducerProtocol {
     enum Action: RoutingAction, BindableAction {
         case navigation(AppRoute.NavigationAction)
         case route(UUID, AppRoute.RouteAction)
+        case modalRoute(AppRoute.RouteAction)
         case binding(BindingAction<State>)
 
         case pushFirst
+        case presentFirst
     }
     var body: some ReducerProtocol<State, Action> {
         Router { action in
             switch action {
                 // TODO: Figure out why autocomplete isn't working
                 case .pushFirst: return .push(.first(.init()))
+                case .presentFirst: return .present(.first(.init()))
+                case .modalRoute(.first(.dismiss)): return .dismiss
                 case .route(_, .first(.pushSecond)): return .push(.second(.init()))
                 case .route(_, .first(.popToLanding)): return .pop()
                 case .route(_, .second(.popToFirst)): return .pop()

@@ -35,6 +35,7 @@ public struct Router<
         Scope(state: \.navigation, action: /Action.navigation) {
             _RoutingReducer()
         }
+        .ifLet(\.navigation.currentModal, action: /Action.modalRoute, then: routeReducer)
         .forEach(\.navigation.routePath, action: /Action.route, routeReducer)
     }
 }

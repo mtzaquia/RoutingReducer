@@ -9,13 +9,16 @@ import ComposableArchitecture
 public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
     public struct State: Equatable {
         @BindingState var navigationPath: NavigationPath
-        public var routePath: IdentifiedArrayOf<Route>
+        var routePath: IdentifiedArrayOf<Route>
+        var currentModal: Route?
 
         public init(
-            routePath: IdentifiedArrayOf<Route> = .init()
+            routePath: IdentifiedArrayOf<Route> = .init(),
+            currentModal: Route? = nil
         ) {
             self.navigationPath = .init(routePath.elements.map(\.id))
             self.routePath = routePath
+            self.currentModal = currentModal
         }
     }
 
@@ -23,12 +26,20 @@ public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
         case binding(BindingAction<State>)
         case push(Route)
         case pop(toRoot: Bool = false)
+        case present(Route)
+        case dismiss
     }
 
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
+                case .present(let route):
+                    state.currentModal = route
+                    return .none
+                case .dismiss:
+                    state.currentModal = nil
+                    return .none
                 case .push(let route):
                     state.navigationPath.append(route.id)
                     state.routePath.append(route)

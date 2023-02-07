@@ -9,4 +9,5 @@ public protocol RoutingAction {
     associatedtype Route: Routing
     static func navigation(_ action: Route.NavigationAction) -> Self
     static func route(_ id: Route.ID, _ action: Route.RouteAction) -> Self
+    static func modalRoute(_ action: Route.RouteAction) -> Self
 }

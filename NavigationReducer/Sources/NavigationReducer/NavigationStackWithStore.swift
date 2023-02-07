@@ -40,11 +40,30 @@ public struct NavigationStackWithStore<Reducer: RoutingReducerProtocol, Root: Vi
                     destination: navigationView(id:)
                 )
             }
+            .sheet(
+                isPresented: .init(
+                    get: { viewStore.state.navigation.currentModal != nil },
+                    set: {
+                        if !$0 {
+                            viewStore.send(.navigation(.dismiss))
+                        }
+                    }
+                )
+            ) {
+                IfLetStore(
+                    store.scope(
+                        state: \.navigation.currentModal,
+                        action: Reducer.Action.modalRoute
+                    ),
+                    then: routeViews
+                )
+            }
         }
     }
 }
 
 // MARK: - Private resolutions
+
 private extension NavigationStackWithStore {
     func navigationView(id: Reducer.State.Route.ID) -> some View {
         IfLetStore(
