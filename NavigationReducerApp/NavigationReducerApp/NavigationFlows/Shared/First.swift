@@ -11,13 +11,15 @@ struct First: ReducerProtocol {
     struct State: RoutedState {
         let id = UUID()
         @BindingState var firstText: String = ""
+        var isModal: Bool
     }
 
     enum Action: BindableAction {
         case binding(BindingAction<State>)
+        
         case pushSecond
         case popToLanding
-//        case dismiss
+        case dismiss
     }
     
     var body: some ReducerProtocol<State, Action> {
@@ -43,10 +45,12 @@ struct FirstView: View {
                 TextField("Input", text: vs.binding(\.$firstText))
                     .padding()
 
-//                Button("Dismiss") {
-//                    vs.send(.dismiss)
-//                }
-//                .padding(.top, 16)
+                if vs.isModal {
+                    Button("Dismiss") {
+                        vs.send(.dismiss)
+                    }
+                    .padding(.top, 16)
+                }
             }
         }
     }

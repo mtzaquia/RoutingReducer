@@ -15,6 +15,8 @@ struct Modal: ReducerProtocol {
 
     enum Action: BindableAction {
         case binding(BindingAction<State>)
+
+        case presentAnother
         case dismiss
     }
 

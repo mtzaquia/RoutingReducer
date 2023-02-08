@@ -47,7 +47,7 @@ struct LandingRouter: RoutingReducerProtocol {
             switch action {
                 case .root(let rootAction):
                     switch rootAction {
-                        case .pushFirst: return .push(.first(.init()))
+                        case .pushFirst: return .push(.first(.init(isModal: false)))
                         case .presentModal: return .present(.modalRouter(.init(root: .init())))
                         default: break
                     }

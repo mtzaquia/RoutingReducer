@@ -8,17 +8,16 @@ import NavigationReducer
 import SwiftUI
 
 enum ModalRoute: Routing {
-//    case first(First.State)
+    case first(First.State)
 
     enum RouteAction {
-//        case first(First.Action)
+        case first(First.Action)
     }
 
     var id: UUID {
-        UUID(uuidString: "modal")!
-//        switch self {
-//            case .first(let state): return state.id
-//        }
+        switch self {
+            case .first(let state): return state.id
+        }
     }
 }
 
@@ -40,9 +39,18 @@ struct ModalRouter: RoutingReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Router { action in
             switch action {
-//                case .root(.dismiss): return .dismiss
-//                case .presentOtherModal: return .present(.first(.init()))
-//                case .modalRoute(.first(.dismiss)): return .dismiss
+                case .root(let rootAction):
+                    switch rootAction {
+                        case .presentAnother: return .present(.first(.init(isModal: true)))
+                        default: break
+                    }
+
+                case .modalRoute(let modalAction):
+                    switch modalAction {
+                        case .first(.dismiss): return .dismiss
+                        default: break
+                    }
+                    
                 default: break
             }
 
@@ -50,11 +58,11 @@ struct ModalRouter: RoutingReducerProtocol {
         } rootReducer: {
             Modal()
         } routeReducer: {
-//            Scope(
-//                state: /ModalRoute.first,
-//                action: /ModalRoute.RouteAction.first,
-//                First.init
-//            )
+            Scope(
+                state: /ModalRoute.first,
+                action: /ModalRoute.RouteAction.first,
+                First.init
+            )
         }
         BindingReducer()
         Reduce { state, action in
@@ -70,14 +78,13 @@ struct ModalRouterView: View {
             store: store,
             rootView: ModalView.init
         ) { store in
-//            SwitchStore(store) {
-//                CaseLet(
-//                    state: /ModalRoute.first,
-//                    action: ModalRoute.RouteAction.first,
-//                    then: FirstView.init
-//                )
-//            }
-            EmptyView()
+            SwitchStore(store) {
+                CaseLet(
+                    state: /ModalRoute.first,
+                    action: ModalRoute.RouteAction.first,
+                    then: FirstView.init
+                )
+            }
         }
     }
 }

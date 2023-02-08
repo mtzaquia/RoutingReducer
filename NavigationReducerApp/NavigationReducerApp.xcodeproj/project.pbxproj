@@ -81,9 +81,8 @@
 		21A92C98298E6AB700868955 /* NavigationReducerApp */ = {
 			isa = PBXGroup;
 			children = (
-				21C774292993DCCB00C326CD /* Landing */,
-				21C774302993DF2900C326CD /* Modal */,
 				21A92C99298E6AB700868955 /* NavigationReducerApp.swift */,
+				21C774342993E83500C326CD /* NavigationFlows */,
 				21A92C9D298E6AB900868955 /* Assets.xcassets */,
 				21A92C9F298E6AB900868955 /* Preview Content */,
 			);
@@ -103,7 +102,6 @@
 			children = (
 				21C774272993DCC700C326CD /* Landing.Router.swift */,
 				21C7742A2993DD2500C326CD /* Landing.swift */,
-				21C7742C2993DE8E00C326CD /* First.swift */,
 				21C7742E2993DEC200C326CD /* Second.swift */,
 			);
 			path = Landing;
@@ -116,6 +114,24 @@
 				21C774312993DF7E00C326CD /* Modal.swift */,
 			);
 			path = Modal;
+			sourceTree = "<group>";
+		};
+		21C774332993E82900C326CD /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				21C7742C2993DE8E00C326CD /* First.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		21C774342993E83500C326CD /* NavigationFlows */ = {
+			isa = PBXGroup;
+			children = (
+				21C774332993E82900C326CD /* Shared */,
+				21C774292993DCCB00C326CD /* Landing */,
+				21C774302993DF2900C326CD /* Modal */,
+			);
+			path = NavigationFlows;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
