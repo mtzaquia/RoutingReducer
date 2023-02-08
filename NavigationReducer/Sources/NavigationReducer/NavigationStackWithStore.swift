@@ -9,15 +9,24 @@ import ComposableArchitecture
 public protocol RoutingReducerProtocol: ReducerProtocol
 where State: RoutingState, Action: RoutingAction, State.Route == Action.Route {}
 
-public struct NavigationStackWithStore<Reducer: RoutingReducerProtocol, Root: View, Route: View>: View {
+public struct NavigationStackWithStore<
+    Reducer: RoutingReducerProtocol,
+    Root: View,
+    Route: View
+>: View {
+    public typealias RootState = Reducer.State.RootState
+    public typealias RootAction = Reducer.Action.RootAction
+    public typealias RouteState = Reducer.Action.Route
+    public typealias RouteAction = Reducer.Action.Route.RouteAction
+
     let store: StoreOf<Reducer>
     let rootView: Root
-    let routeViews: (Store<Reducer.Action.Route, Reducer.Action.Route.RouteAction>) -> Route
+    let routeViews: (Store<RouteState, RouteAction>) -> Route
 
     public init(
         store: StoreOf<Reducer>,
-        @ViewBuilder rootView: (Store<Reducer.State.RootState, Reducer.Action.RootAction>) -> Root,
-        @ViewBuilder routeViews: @escaping (Store<Reducer.Action.Route, Reducer.Action.Route.RouteAction>) -> Route
+        @ViewBuilder rootView: (Store<RootState, RootAction>) -> Root,
+        @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> Route
     ) {
         self.store = store
         self.rootView = rootView(
