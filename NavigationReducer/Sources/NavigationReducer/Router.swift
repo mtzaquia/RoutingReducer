@@ -9,18 +9,22 @@ public struct Router<
     Route: Routing,
     State: RoutingState,
     Action: RoutingAction,
+    RootReducer: ReducerProtocol<State.RootState, Action.RootAction>,
     RouteReducer: ReducerProtocol<Route, Route.RouteAction>
 >: ReducerProtocol where Route == State.Route, Route == Action.Route {
     public typealias Handler = (Action) -> Route.NavigationAction?
 
     private let handler: Handler
+    private let rootReducer: () -> RootReducer
     private let routeReducer: () -> RouteReducer
 
     public init(
         _ handler: @escaping Handler,
+        @ReducerBuilder<State.RootState, Action.RootAction> rootReducer: @escaping () -> RootReducer,
         @ReducerBuilder<Route, Route.RouteAction> routeReducer: @escaping () -> RouteReducer
     ) {
         self.handler = handler
+        self.rootReducer = rootReducer
         self.routeReducer = routeReducer
     }
 
@@ -37,5 +41,6 @@ public struct Router<
         }
         .ifLet(\.navigation.currentModal, action: /Action.modalRoute, then: routeReducer)
         .forEach(\.navigation.routePath, action: /Action.route, routeReducer)
+        Scope(state: \.root, action: /Action.root, rootReducer)
     }
 }

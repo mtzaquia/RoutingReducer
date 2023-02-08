@@ -11,31 +11,31 @@ import NavigationReducer
 struct NavigationReducerApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationStackWithStore<Landing, _, _>(
+            NavigationStackWithStore<LandingRouter, _, _>(
                 store: .init(
-                    initialState: .init(),
-                    reducer: Landing()
+                    initialState: .init(root: .init()),
+                    reducer: LandingRouter()
                 ),
                 rootView: LandingView.init
             ) { store in
-                    SwitchStore(store) {
-                        CaseLet(
-                            state: /AppRoute.first,
-                            action: AppRoute.RouteAction.first,
-                            then: FirstView.init
-                        )
-                        CaseLet(
-                            state: /AppRoute.second,
-                            action: AppRoute.RouteAction.second,
-                            then: SecondView.init
-                        )
-                        CaseLet(
-                            state: /AppRoute.modalLanding,
-                            action: AppRoute.RouteAction.modalLanding,
-                            then: ModalLandingView.init
-                        )
-                    }
+                SwitchStore(store) {
+                    CaseLet(
+                        state: /LandingRoute.first,
+                        action: LandingRoute.RouteAction.first,
+                        then: FirstView.init
+                    )
+                    CaseLet(
+                        state: /LandingRoute.second,
+                        action: LandingRoute.RouteAction.second,
+                        then: SecondView.init
+                    )
+                    CaseLet(
+                        state: /LandingRoute.modalRouter,
+                        action: LandingRoute.RouteAction.modalRouter,
+                        then: ModalRouterView.init
+                    )
                 }
+            }
         }
     }
 }

@@ -16,11 +16,16 @@ public struct NavigationStackWithStore<Reducer: RoutingReducerProtocol, Root: Vi
 
     public init(
         store: StoreOf<Reducer>,
-        @ViewBuilder rootView: (StoreOf<Reducer>) -> Root,
+        @ViewBuilder rootView: (Store<Reducer.State.RootState, Reducer.Action.RootAction>) -> Root,
         @ViewBuilder routeViews: @escaping (Store<Reducer.Action.Route, Reducer.Action.Route.RouteAction>) -> Route
     ) {
         self.store = store
-        self.rootView = rootView(store)
+        self.rootView = rootView(
+            store.scope(
+                state: \.root,
+                action: Reducer.Action.root
+            )
+        )
         self.routeViews = routeViews
     }
 

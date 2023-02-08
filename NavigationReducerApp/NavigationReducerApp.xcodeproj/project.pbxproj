@@ -8,23 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		216D04A8298EB66600853743 /* NavigationReducer in Frameworks */ = {isa = PBXBuildFile; productRef = 216D04A7298EB66600853743 /* NavigationReducer */; };
-		216D04AA299106FF00853743 /* Reducers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D04A9299106FF00853743 /* Reducers.swift */; };
-		216D04AC2991073A00853743 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D04AB2991073A00853743 /* Navigation.swift */; };
+		216D04AC2991073A00853743 /* ModalRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D04AB2991073A00853743 /* ModalRouter.swift */; };
 		21A92C9A298E6AB700868955 /* NavigationReducerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A92C99298E6AB700868955 /* NavigationReducerApp.swift */; };
-		21A92C9C298E6AB700868955 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A92C9B298E6AB700868955 /* Views.swift */; };
 		21A92C9E298E6AB900868955 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A92C9D298E6AB900868955 /* Assets.xcassets */; };
 		21A92CA1298E6AB900868955 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A92CA0298E6AB900868955 /* Preview Assets.xcassets */; };
+		21C774282993DCC700C326CD /* LandingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C774272993DCC700C326CD /* LandingRouter.swift */; };
+		21C7742B2993DD2500C326CD /* Landing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742A2993DD2500C326CD /* Landing.swift */; };
+		21C7742D2993DE8E00C326CD /* First.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742C2993DE8E00C326CD /* First.swift */; };
+		21C7742F2993DEC200C326CD /* Second.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742E2993DEC200C326CD /* Second.swift */; };
+		21C774322993DF7E00C326CD /* Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C774312993DF7E00C326CD /* Modal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		216D04A6298EB61E00853743 /* NavigationReducer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = NavigationReducer; path = ../NavigationReducer; sourceTree = "<group>"; };
-		216D04A9299106FF00853743 /* Reducers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducers.swift; sourceTree = "<group>"; };
-		216D04AB2991073A00853743 /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
+		216D04AB2991073A00853743 /* ModalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalRouter.swift; sourceTree = "<group>"; };
 		21A92C96298E6AB700868955 /* NavigationReducerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NavigationReducerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A92C99298E6AB700868955 /* NavigationReducerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationReducerApp.swift; sourceTree = "<group>"; };
-		21A92C9B298E6AB700868955 /* Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
 		21A92C9D298E6AB900868955 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21A92CA0298E6AB900868955 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		21C774272993DCC700C326CD /* LandingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingRouter.swift; sourceTree = "<group>"; };
+		21C7742A2993DD2500C326CD /* Landing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Landing.swift; sourceTree = "<group>"; };
+		21C7742C2993DE8E00C326CD /* First.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = First.swift; sourceTree = "<group>"; };
+		21C7742E2993DEC200C326CD /* Second.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Second.swift; sourceTree = "<group>"; };
+		21C774312993DF7E00C326CD /* Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,10 +81,9 @@
 		21A92C98298E6AB700868955 /* NavigationReducerApp */ = {
 			isa = PBXGroup;
 			children = (
+				21C774292993DCCB00C326CD /* Landing */,
+				21C774302993DF2900C326CD /* Modal */,
 				21A92C99298E6AB700868955 /* NavigationReducerApp.swift */,
-				216D04AB2991073A00853743 /* Navigation.swift */,
-				216D04A9299106FF00853743 /* Reducers.swift */,
-				21A92C9B298E6AB700868955 /* Views.swift */,
 				21A92C9D298E6AB900868955 /* Assets.xcassets */,
 				21A92C9F298E6AB900868955 /* Preview Content */,
 			);
@@ -91,6 +96,26 @@
 				21A92CA0298E6AB900868955 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		21C774292993DCCB00C326CD /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				21C774272993DCC700C326CD /* LandingRouter.swift */,
+				21C7742A2993DD2500C326CD /* Landing.swift */,
+				21C7742C2993DE8E00C326CD /* First.swift */,
+				21C7742E2993DEC200C326CD /* Second.swift */,
+			);
+			path = Landing;
+			sourceTree = "<group>";
+		};
+		21C774302993DF2900C326CD /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				216D04AB2991073A00853743 /* ModalRouter.swift */,
+				21C774312993DF7E00C326CD /* Modal.swift */,
+			);
+			path = Modal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,10 +194,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21A92C9C298E6AB700868955 /* Views.swift in Sources */,
-				216D04AA299106FF00853743 /* Reducers.swift in Sources */,
+				21C774282993DCC700C326CD /* LandingRouter.swift in Sources */,
+				21C7742D2993DE8E00C326CD /* First.swift in Sources */,
+				21C7742F2993DEC200C326CD /* Second.swift in Sources */,
+				21C7742B2993DD2500C326CD /* Landing.swift in Sources */,
 				21A92C9A298E6AB700868955 /* NavigationReducerApp.swift in Sources */,
-				216D04AC2991073A00853743 /* Navigation.swift in Sources */,
+				21C774322993DF7E00C326CD /* Modal.swift in Sources */,
+				216D04AC2991073A00853743 /* ModalRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
