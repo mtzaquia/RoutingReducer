@@ -33,6 +33,7 @@ struct LandingRouter: RoutingReducerProtocol {
         var navigation: LandingRoute.NavigationState = .init()
         var root: Landing.State
     }
+    
     enum Action: RoutingAction, BindableAction {
         case navigation(LandingRoute.NavigationAction)
         case route(UUID, LandingRoute.RouteAction)
@@ -44,15 +45,32 @@ struct LandingRouter: RoutingReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Router { action in
             switch action {
-                case .root(.pushFirst): return .push(.first(.init()))
-                case .root(.presentModal): return .present(.modalRouter(.init(root: .init())))
-                case .modalRoute(.modalRouter(.root(.dismiss))): return .dismiss
-                case .route(_, .first(.pushSecond)): return .push(.second(.init()))
-                case .route(_, .first(.popToLanding)): return .pop()
-                case .route(_, .second(.popToFirst)): return .pop()
-                case .route(_, .second(.popToRoot)): return .pop(toRoot: true)
-                default: return nil
+                case .root(let rootAction):
+                    switch rootAction {
+                        case .pushFirst: return .push(.first(.init()))
+                        case .presentModal: return .present(.modalRouter(.init(root: .init())))
+                        default: break
+                    }
+
+                case .modalRoute(let modalAction):
+                    switch modalAction {
+                        case .modalRouter(.root(.dismiss)): return .dismiss
+                        default: break
+                    }
+
+                case .route(_, let routeAction):
+                    switch routeAction {
+                        case .first(.pushSecond): return .push(.second(.init()))
+                        case .first(.popToLanding): return .pop()
+                        case .second(.popToFirst): return .pop()
+                        case .second(.popToRoot): return .pop(toRoot: true)
+                        default: break
+                    }
+
+                default: break
             }
+
+            return nil
         } rootReducer: {
             Landing()
         } routeReducer: {

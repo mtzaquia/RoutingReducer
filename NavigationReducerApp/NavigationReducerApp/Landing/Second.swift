@@ -17,14 +17,12 @@ struct Second: ReducerProtocol {
         case binding(BindingAction<State>)
         case popToFirst
         case popToRoot
-        case dismiss
+//        case dismiss
     }
 
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Reduce { state, action in
-            return .none
-        }
+        EmptyReducer()
     }
 }
 
