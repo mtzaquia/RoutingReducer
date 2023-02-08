@@ -3,7 +3,7 @@
 // Copyright ® 2023 Mauricio Tremea Zaquia. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 import ComposableArchitecture
 import NavigationReducer
 
@@ -89,6 +89,34 @@ struct LandingRouter: RoutingReducerProtocol {
                 action: /LandingRoute.RouteAction.modalRouter,
                 ModalRouter.init
             )
+        }
+    }
+}
+
+struct LandingRouterView: View {
+    let store: StoreOf<LandingRouter>
+    var body: some View {
+        NavigationStackWithStore<LandingRouter, _, _>(
+            store: store,
+            rootView: LandingView.init
+        ) { store in
+            SwitchStore(store) {
+                CaseLet(
+                    state: /LandingRoute.first,
+                    action: LandingRoute.RouteAction.first,
+                    then: FirstView.init
+                )
+                CaseLet(
+                    state: /LandingRoute.second,
+                    action: LandingRoute.RouteAction.second,
+                    then: SecondView.init
+                )
+                CaseLet(
+                    state: /LandingRoute.modalRouter,
+                    action: LandingRoute.RouteAction.modalRouter,
+                    then: ModalRouterView.init
+                )
+            }
         }
     }
 }
