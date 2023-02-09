@@ -95,7 +95,8 @@ struct LandingRouter: RoutingReducerProtocol {
 struct LandingRouterView: View {
     let store: StoreOf<LandingRouter>
     var body: some View {
-        NavigationStackWithStore<LandingRouter, _, _>(
+//        NavigationStackWithStore<LandingRouter, _, _>(
+        NavigationControllerWithStore<LandingRouter, _, _>(
             store: store,
             rootView: LandingView.init
         ) { store in
