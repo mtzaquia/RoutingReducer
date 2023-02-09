@@ -45,11 +45,10 @@ import ComposableArchitecture
 /// }
 /// ```
 public protocol Routing: Equatable, Hashable, Identifiable {
-    /// An alias to the built-in routing reducer state, usually held by your ``RoutingState``.
-    typealias NavigationState = _RoutingReducer<Self>.State
-    /// An alias to the built-in routing reducer action, usually a parameter to the `navigation` case
-    /// in your ``RoutingAction``.
-    typealias NavigationAction = _RoutingReducer<Self>.Action
+    /// A convenience alias for ``RoutingReducer<Self>.State``.
+    typealias NavigationState = RoutingReducer<Self>.State
+    /// A convenience alias for ``RoutingReducer<Self>.Action``.
+    typealias NavigationAction = RoutingReducer<Self>.Action
 
     /// The set of actions for all possible routes described by this type.
     associatedtype RouteAction

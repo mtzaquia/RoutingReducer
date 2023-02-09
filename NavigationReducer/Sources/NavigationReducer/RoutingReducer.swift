@@ -6,12 +6,18 @@
 import struct SwiftUI.NavigationPath
 import ComposableArchitecture
 
-public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
+public enum RoutingReducer<Route: Routing> {
+    /// A built-in routing reducer state, usually held by your ``RoutingState``.
     public struct State: Equatable, Hashable {
         @BindingState var navigationPath: NavigationPath
         var routePath: IdentifiedArrayOf<Route>
         var currentModal: Route?
 
+        /// Creates a new ``RoutingReducer.State`` for a specific navigation state.
+        ///
+        /// - Parameters:
+        ///   - routePath: The current path of pushed routes, or empty for being at the root.
+        ///   - currentModal: The current modal being presented on this navigation flow.
         public init(
             routePath: IdentifiedArrayOf<Route> = .init(),
             currentModal: Route? = nil
@@ -21,12 +27,15 @@ public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
             self.currentModal = currentModal
         }
 
+        /// A built-in routing reducer action, usually
+        /// a parameter to the `navigation` case in your ``RoutingAction``.
         public func hash(into hasher: inout Hasher) {
             hasher.combine(routePath)
             hasher.combine(currentModal)
         }
     }
 
+    /// A built-in routing reducer action, usually held by your ``RoutingState``.
     public enum Action: BindableAction {
         case binding(BindingAction<State>)
         case push(Route)
@@ -34,8 +43,13 @@ public struct _RoutingReducer<Route: Routing>: ReducerProtocol {
         case present(Route)
         case dismiss
     }
+}
 
-    public var body: some ReducerProtocol<State, Action> {
+struct _RoutingReducer<Route: Routing>: ReducerProtocol {
+    typealias State = RoutingReducer<Route>.State
+    typealias Action = RoutingReducer<Route>.Action
+
+    var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
