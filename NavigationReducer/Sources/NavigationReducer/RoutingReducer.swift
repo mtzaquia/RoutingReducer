@@ -27,8 +27,6 @@ public enum RoutingReducer<Route: Routing> {
             self.currentModal = currentModal
         }
 
-        /// A built-in routing reducer action, usually
-        /// a parameter to the `navigation` case in your ``RoutingAction``.
         public func hash(into hasher: inout Hasher) {
             hasher.combine(routePath)
             hasher.combine(currentModal)

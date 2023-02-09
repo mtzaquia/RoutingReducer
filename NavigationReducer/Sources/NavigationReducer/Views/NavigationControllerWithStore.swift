@@ -122,8 +122,12 @@ private struct _NavigationControllerWithStore<
                 skipSuper: true
             )
 
-            let adjustedIndex = index - 1 // routePath is 0 based, viewControllers is 1 based (there's always a root)
+            print("routePath.count:", routePath.count)
+            let adjustedIndex = index //- 1 // routePath is 0 based, viewControllers is 1 based (there's always a root)
+            print("adjustedIndex:", adjustedIndex)
             routePath.removeLast(routePath.count - adjustedIndex)
+
+            print(routePath.map(\.id).map(AnyHashable.init))
         }
     }
 
@@ -135,7 +139,7 @@ private struct _NavigationControllerWithStore<
             return
         }
 
-        print("view", viewState)
+        print(routePath.map(\.id).map(AnyHashable.init))
 
         if viewState.count > controllerState.count {
             for i in controllerState.count..<viewState.count {
@@ -159,8 +163,6 @@ private struct _NavigationControllerWithStore<
                 animated: true
             )
         }
-
-        print("nav", navigationController.routePathIds)
     }
 }
 
@@ -169,22 +171,14 @@ private struct _NavigationControllerWithStore<
 private final class _UINavigationControllerWithRoutePath: UINavigationController {
     func pushViewController(_ viewController: UIViewController, animated: Bool, routeId: AnyHashable) {
         routePathIds.append(routeId)
-
-        let oldDelegate = delegate
-        delegate = nil
         super.pushViewController(viewController, animated: animated)
-        delegate = oldDelegate
     }
 
     @discardableResult
     func popToViewControllerAt(_ index: Int, animated: Bool, skipSuper: Bool = false) -> [UIViewController]? {
         let difference = routePathIds.count - index
 
-        let oldDelegate = delegate
-        delegate = nil
-
         defer {
-            delegate = oldDelegate
             routePathIds.removeLast(difference)
         }
 
@@ -207,24 +201,13 @@ extension _NavigationControllerWithStore {
             self.onPopToIndex = onPopToIndex
         }
 
-        func navigationController(
-            _ navigationController: UINavigationController,
-            animationControllerFor operation: UINavigationController.Operation,
-            from fromVC: UIViewController,
-            to toVC: UIViewController
-        ) -> UIViewControllerAnimatedTransitioning? {
-            guard let nc = navigationController as? _UINavigationControllerWithRoutePath
-            else { return nil }
+        func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+            guard let nc = navigationController as? _UINavigationControllerWithRoutePath else { return }
 
-            DispatchQueue.main.asyncAfter(deadline: .now()) {
-                switch operation {
-                    case .pop:
-                        self.onPopToIndex(nc, nc.viewControllers.count)
-                    default: break
+                let isPopping = (nc.viewControllers.count - 1) < nc.routePathIds.count
+                if isPopping {
+                    self.onPopToIndex(nc, nc.viewControllers.count - 1)
                 }
-            }
-
-            return nil
         }
     }
 }
