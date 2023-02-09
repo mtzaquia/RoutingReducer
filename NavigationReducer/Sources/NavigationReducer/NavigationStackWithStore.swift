@@ -91,12 +91,12 @@ private extension NavigationStackWithStore {
 }
 
 private func replayNonNil<A, B>(_ inputClosure: @escaping (A) -> B?) -> (A) -> B? {
-  var lastNonNilOutput: B? = nil
-  return { inputValue in
-    guard let outputValue = inputClosure(inputValue) else {
-      return lastNonNilOutput
+    var lastNonNilOutput: B? = nil
+    return { inputValue in
+        guard let outputValue = inputClosure(inputValue) else {
+            return lastNonNilOutput
+        }
+        lastNonNilOutput = outputValue
+        return outputValue
     }
-    lastNonNilOutput = outputValue
-    return outputValue
-  }
 }
