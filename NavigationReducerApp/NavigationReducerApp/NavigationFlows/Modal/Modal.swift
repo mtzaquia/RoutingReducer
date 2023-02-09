@@ -31,10 +31,9 @@ struct ModalView: View {
     var body: some View {
         WithViewStore(store) { vs in
             VStack {
-                Text("Modal")
-//                Button("Present") {
-//                    vs.send(.presentOtherModal)
-//                }
+                Button("Present") {
+                    vs.send(.presentAnother)
+                }
 
                 TextField("Input", text: vs.binding(\.$modalText))
                     .padding()
@@ -44,6 +43,7 @@ struct ModalView: View {
                 }
                 .padding(.top, 16)
             }
+            .navigationBarTitle("Modal")
         }
     }
 }

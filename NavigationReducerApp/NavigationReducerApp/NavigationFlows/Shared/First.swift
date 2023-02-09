@@ -34,12 +34,15 @@ struct FirstView: View {
         WithViewStore(store) { vs in
             VStack {
                 Text("First")
-                Button("Push") {
-                    vs.send(.pushSecond)
-                }
+                    .font(.title)
+                if !vs.isModal {
+                    Button("Push") {
+                        vs.send(.pushSecond)
+                    }
 
-                Button("Pop") {
-                    vs.send(.popToLanding)
+                    Button("Pop") {
+                        vs.send(.popToLanding)
+                    }
                 }
 
                 TextField("Input", text: vs.binding(\.$firstText))
