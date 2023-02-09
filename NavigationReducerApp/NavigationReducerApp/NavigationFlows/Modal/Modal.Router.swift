@@ -7,31 +7,31 @@ import ComposableArchitecture
 import NavigationReducer
 import SwiftUI
 
-enum ModalRoute: Routing {
-    case first(First.State)
+struct ModalRouter: RoutingReducerProtocol {
+    enum Route: Routing {
+        case first(First.State)
 
-    enum RouteAction {
-        case first(First.Action)
-    }
+        enum RouteAction {
+            case first(First.Action)
+        }
 
-    var id: UUID {
-        switch self {
-            case .first(let state): return state.id
+        var id: UUID {
+            switch self {
+                case .first(let state): return state.id
+            }
         }
     }
-}
 
-struct ModalRouter: RoutingReducerProtocol {
     struct State: RoutingState {
         let id = UUID()
-        var navigation: ModalRoute.NavigationState = .init()
+        var navigation: Route.NavigationState = .init()
         var root: Modal.State
     }
 
     enum Action: RoutingAction, BindableAction {
-        case navigation(ModalRoute.NavigationAction)
-        case route(ModalRoute.ID, ModalRoute.RouteAction)
-        case modalRoute(ModalRoute.RouteAction)
+        case navigation(Route.NavigationAction)
+        case route(Route.ID, Route.RouteAction)
+        case modalRoute(Route.RouteAction)
         case binding(BindingAction<State>)
         case root(Modal.Action)
     }
@@ -59,8 +59,8 @@ struct ModalRouter: RoutingReducerProtocol {
             Modal()
         } routeReducer: {
             Scope(
-                state: /ModalRoute.first,
-                action: /ModalRoute.RouteAction.first,
+                state: /Route.first,
+                action: /Route.RouteAction.first,
                 First.init
             )
         }
@@ -80,8 +80,8 @@ struct ModalRouterView: View {
         ) { store in
             SwitchStore(store) {
                 CaseLet(
-                    state: /ModalRoute.first,
-                    action: ModalRoute.RouteAction.first,
+                    state: /ModalRouter.Route.first,
+                    action: ModalRouter.Route.RouteAction.first,
                     then: FirstView.init
                 )
             }

@@ -7,38 +7,37 @@ import SwiftUI
 import ComposableArchitecture
 import NavigationReducer
 
-enum LandingRoute: Routing {
-    case first(First.State)
-    case second(Second.State)
-    case modalRouter(ModalRouter.State)
+struct LandingRouter: RoutingReducerProtocol {
+    enum Route: Routing {
+        case first(First.State)
+        case second(Second.State)
+        case modalRouter(ModalRouter.State)
 
-    enum RouteAction {
-        case first(First.Action)
-        case second(Second.Action)
-        case modalRouter(ModalRouter.Action)
-    }
+        enum RouteAction {
+            case first(First.Action)
+            case second(Second.Action)
+            case modalRouter(ModalRouter.Action)
+        }
 
-    var id: UUID {
-        switch self {
-            case .first(let state): return state.id
-            case .second(let state): return state.id
-            case .modalRouter(let state): return state.id
+        var id: UUID {
+            switch self {
+                case .first(let state): return state.id
+                case .second(let state): return state.id
+                case .modalRouter(let state): return state.id
+            }
         }
     }
-}
 
-struct LandingRouter: RoutingReducerProtocol {
     struct State: RoutingState {
         let id = UUID()
-        var navigation: LandingRoute.NavigationState = .init()
+        var navigation: Route.NavigationState = .init()
         var root: Landing.State
     }
     
-    enum Action: RoutingAction, BindableAction {
-        case navigation(LandingRoute.NavigationAction)
-        case route(UUID, LandingRoute.RouteAction)
-        case modalRoute(LandingRoute.RouteAction)
-        case binding(BindingAction<State>)
+    enum Action: RoutingAction {
+        case navigation(Route.NavigationAction)
+        case route(UUID, Route.RouteAction)
+        case modalRoute(Route.RouteAction)
         case root(Landing.Action)
     }
 
@@ -75,18 +74,18 @@ struct LandingRouter: RoutingReducerProtocol {
             Landing()
         } routeReducer: {
             Scope(
-                state: /LandingRoute.first,
-                action: /LandingRoute.RouteAction.first,
+                state: /Route.first,
+                action: /Route.RouteAction.first,
                 First.init
             )
             Scope(
-                state: /LandingRoute.second,
-                action: /LandingRoute.RouteAction.second,
+                state: /Route.second,
+                action: /Route.RouteAction.second,
                 Second.init
             )
             Scope(
-                state: /LandingRoute.modalRouter,
-                action: /LandingRoute.RouteAction.modalRouter,
+                state: /Route.modalRouter,
+                action: /Route.RouteAction.modalRouter,
                 ModalRouter.init
             )
         }
@@ -102,18 +101,18 @@ struct LandingRouterView: View {
         ) { store in
             SwitchStore(store) {
                 CaseLet(
-                    state: /LandingRoute.first,
-                    action: LandingRoute.RouteAction.first,
+                    state: /LandingRouter.Route.first,
+                    action: LandingRouter.Route.RouteAction.first,
                     then: FirstView.init
                 )
                 CaseLet(
-                    state: /LandingRoute.second,
-                    action: LandingRoute.RouteAction.second,
+                    state: /LandingRouter.Route.second,
+                    action: LandingRouter.Route.RouteAction.second,
                     then: SecondView.init
                 )
                 CaseLet(
-                    state: /LandingRoute.modalRouter,
-                    action: LandingRoute.RouteAction.modalRouter,
+                    state: /LandingRouter.Route.modalRouter,
+                    action: LandingRouter.Route.RouteAction.modalRouter,
                     then: ModalRouterView.init
                 )
             }

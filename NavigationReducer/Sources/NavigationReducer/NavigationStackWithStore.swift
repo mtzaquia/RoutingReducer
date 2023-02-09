@@ -6,9 +6,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-public protocol RoutingReducerProtocol: ReducerProtocol
-where State: RoutingState, Action: RoutingAction, State.Route == Action.Route {}
-
 public struct NavigationStackWithStore<
     Reducer: RoutingReducerProtocol,
     Root: View,
@@ -87,16 +84,5 @@ private extension NavigationStackWithStore {
             ),
             then: routeViews
         )
-    }
-}
-
-private func replayNonNil<A, B>(_ inputClosure: @escaping (A) -> B?) -> (A) -> B? {
-    var lastNonNilOutput: B? = nil
-    return { inputValue in
-        guard let outputValue = inputClosure(inputValue) else {
-            return lastNonNilOutput
-        }
-        lastNonNilOutput = outputValue
-        return outputValue
     }
 }

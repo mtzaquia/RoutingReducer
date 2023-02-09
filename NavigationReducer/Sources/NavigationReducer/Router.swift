@@ -11,7 +11,7 @@ public struct Router<
     Action: RoutingAction,
     RootReducer: ReducerProtocol<State.RootState, Action.RootAction>,
     RouteReducer: ReducerProtocol<Route, Route.RouteAction>
->: ReducerProtocol where Route == State.Route, Route == Action.Route {
+>: ReducerProtocol where State.Route == Route, Action.Route == Route {
     public typealias Handler = (Action) -> Route.NavigationAction?
 
     private let handler: Handler
