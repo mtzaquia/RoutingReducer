@@ -9,7 +9,7 @@ import ComposableArchitecture
 ///
 /// You **can** nest ``Routing`` types for more complex navigation patterns.
 ///
-/// - Usage:
+/// Usage:
 /// ```
 /// struct SomeRouter: RoutingReducerProtocol {
 ///     enum Route: Routing {

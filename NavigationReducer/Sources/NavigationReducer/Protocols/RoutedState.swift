@@ -9,7 +9,7 @@ import Foundation
 ///
 /// - Important: Every state that's part of a ``Routing`` type **must** conform to this protocol.
 ///
-/// - Usage:
+/// Usage:
 /// ```
 /// struct First: ReducerProtocol {
 ///     struct State: RoutedState {

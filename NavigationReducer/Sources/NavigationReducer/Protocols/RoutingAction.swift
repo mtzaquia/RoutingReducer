@@ -9,7 +9,7 @@ import ComposableArchitecture
 ///
 /// - Important: Conformances to ``RoutingReducerProtocol`` require their `Action` to conform to this protocol.
 ///
-/// - Usage:
+/// Usage:
 /// ```
 /// struct SomeRouter: RoutingReducerProtocol {
 ///     enum Route: Routing {
