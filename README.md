@@ -1,6 +1,6 @@
 # RoutingReducer
 
-_..._
+RoutingReducer is a library aiming at an improved developer experience for stateful navigation on TCA. It is loosely inspired by the coordinator pattern.
 
 ## Instalation
 
