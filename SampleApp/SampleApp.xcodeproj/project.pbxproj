@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2149EA7429964E4800B84BEA /* RoutingReducer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RoutingReducer; path = ..; sourceTree = "<group>"; };
+		2149EA752996516000B84BEA /* RoutingReducer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RoutingReducer; path = ..; sourceTree = "<group>"; };
 		216D04AB2991073A00853743 /* Modal.Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modal.Router.swift; sourceTree = "<group>"; };
 		21A92C96298E6AB700868955 /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A92C99298E6AB700868955 /* SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleApp.swift; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		216D04A4298EB4B600853743 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				2149EA7429964E4800B84BEA /* RoutingReducer */,
+				2149EA752996516000B84BEA /* RoutingReducer */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -429,8 +429,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mtzaquia/RoutingReducer.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.9;
 			};
 		};
 		216D04A1298E6C5600853743 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
