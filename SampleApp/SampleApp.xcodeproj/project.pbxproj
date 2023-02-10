@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2149EA7329964E0600B84BEA /* RoutingReducer in Frameworks */ = {isa = PBXBuildFile; productRef = 2149EA7229964E0600B84BEA /* RoutingReducer */; };
 		216D04AC2991073A00853743 /* Modal.Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D04AB2991073A00853743 /* Modal.Router.swift */; };
 		21A92C9A298E6AB700868955 /* SampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A92C99298E6AB700868955 /* SampleApp.swift */; };
 		21A92C9E298E6AB900868955 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A92C9D298E6AB900868955 /* Assets.xcassets */; };
 		21A92CA1298E6AB900868955 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A92CA0298E6AB900868955 /* Preview Assets.xcassets */; };
-		21B0081329964A5C00A8FD93 /* RoutingReducer in Frameworks */ = {isa = PBXBuildFile; productRef = 21B0081229964A5C00A8FD93 /* RoutingReducer */; };
+		21B0081729964D7500A8FD93 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 21B0081629964D7500A8FD93 /* ComposableArchitecture */; };
 		21C774282993DCC700C326CD /* Landing.Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C774272993DCC700C326CD /* Landing.Router.swift */; };
 		21C7742B2993DD2500C326CD /* Landing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742A2993DD2500C326CD /* Landing.swift */; };
 		21C7742D2993DE8E00C326CD /* First.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742C2993DE8E00C326CD /* First.swift */; };
@@ -20,12 +21,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2149EA7429964E4800B84BEA /* RoutingReducer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RoutingReducer; path = ..; sourceTree = "<group>"; };
 		216D04AB2991073A00853743 /* Modal.Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modal.Router.swift; sourceTree = "<group>"; };
 		21A92C96298E6AB700868955 /* SampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21A92C99298E6AB700868955 /* SampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleApp.swift; sourceTree = "<group>"; };
 		21A92C9D298E6AB900868955 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21A92CA0298E6AB900868955 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		21B0081129964A2300A8FD93 /* RoutingReducer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RoutingReducer; path = ..; sourceTree = "<group>"; };
 		21C774272993DCC700C326CD /* Landing.Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Landing.Router.swift; sourceTree = "<group>"; };
 		21C7742A2993DD2500C326CD /* Landing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Landing.swift; sourceTree = "<group>"; };
 		21C7742C2993DE8E00C326CD /* First.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = First.swift; sourceTree = "<group>"; };
@@ -38,7 +39,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21B0081329964A5C00A8FD93 /* RoutingReducer in Frameworks */,
+				2149EA7329964E0600B84BEA /* RoutingReducer in Frameworks */,
+				21B0081729964D7500A8FD93 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,7 +57,7 @@
 		216D04A4298EB4B600853743 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				21B0081129964A2300A8FD93 /* RoutingReducer */,
+				2149EA7429964E4800B84BEA /* RoutingReducer */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -151,7 +153,8 @@
 			);
 			name = SampleApp;
 			packageProductDependencies = (
-				21B0081229964A5C00A8FD93 /* RoutingReducer */,
+				21B0081629964D7500A8FD93 /* ComposableArchitecture */,
+				2149EA7229964E0600B84BEA /* RoutingReducer */,
 			);
 			productName = NavigationReducer;
 			productReference = 21A92C96298E6AB700868955 /* SampleApp.app */;
@@ -183,6 +186,7 @@
 			mainGroup = 21A92C8D298E6AB700868955;
 			packageReferences = (
 				216D04A1298E6C5600853743 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				2149EA7129964E0600B84BEA /* XCRemoteSwiftPackageReference "RoutingReducer" */,
 			);
 			productRefGroup = 21A92C97298E6AB700868955 /* Products */;
 			projectDirPath = "";
@@ -421,6 +425,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2149EA7129964E0600B84BEA /* XCRemoteSwiftPackageReference "RoutingReducer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mtzaquia/RoutingReducer.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		216D04A1298E6C5600853743 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -432,9 +444,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		21B0081229964A5C00A8FD93 /* RoutingReducer */ = {
+		2149EA7229964E0600B84BEA /* RoutingReducer */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 2149EA7129964E0600B84BEA /* XCRemoteSwiftPackageReference "RoutingReducer" */;
 			productName = RoutingReducer;
+		};
+		21B0081629964D7500A8FD93 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 216D04A1298E6C5600853743 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

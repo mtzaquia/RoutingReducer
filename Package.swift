@@ -9,7 +9,8 @@ let package = Package(
     products: [
         .library(
             name: "RoutingReducer",
-            targets: ["RoutingReducer"]),
+            targets: ["RoutingReducer"]
+        ),
     ],
     dependencies: [
         .package(
@@ -25,8 +26,7 @@ let package = Package(
                     name: "ComposableArchitecture",
                     package: "swift-composable-architecture"
                 )
-            ],
-            exclude: ["../../SampleApp"]
+            ]
         )
     ]
 )
