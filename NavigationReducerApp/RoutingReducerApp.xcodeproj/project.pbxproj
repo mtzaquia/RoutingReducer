@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		216D04A8298EB66600853743 /* NavigationReducer in Frameworks */ = {isa = PBXBuildFile; productRef = 216D04A7298EB66600853743 /* NavigationReducer */; };
 		216D04AC2991073A00853743 /* Modal.Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D04AB2991073A00853743 /* Modal.Router.swift */; };
-		21A92C9A298E6AB700868955 /* NavigationReducerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A92C99298E6AB700868955 /* NavigationReducerApp.swift */; };
+		21A92C9A298E6AB700868955 /* RoutingReducerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A92C99298E6AB700868955 /* RoutingReducerApp.swift */; };
 		21A92C9E298E6AB900868955 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A92C9D298E6AB900868955 /* Assets.xcassets */; };
 		21A92CA1298E6AB900868955 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21A92CA0298E6AB900868955 /* Preview Assets.xcassets */; };
 		21C774282993DCC700C326CD /* Landing.Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C774272993DCC700C326CD /* Landing.Router.swift */; };
@@ -17,13 +16,14 @@
 		21C7742D2993DE8E00C326CD /* First.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742C2993DE8E00C326CD /* First.swift */; };
 		21C7742F2993DEC200C326CD /* Second.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C7742E2993DEC200C326CD /* Second.swift */; };
 		21C774322993DF7E00C326CD /* Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C774312993DF7E00C326CD /* Modal.swift */; };
+		21CE96FF299645F600BECC1F /* RoutingReducer in Frameworks */ = {isa = PBXBuildFile; productRef = 21CE96FE299645F600BECC1F /* RoutingReducer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		216D04A6298EB61E00853743 /* NavigationReducer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = NavigationReducer; path = ../NavigationReducer; sourceTree = "<group>"; };
 		216D04AB2991073A00853743 /* Modal.Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modal.Router.swift; sourceTree = "<group>"; };
-		21A92C96298E6AB700868955 /* NavigationReducerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NavigationReducerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		21A92C99298E6AB700868955 /* NavigationReducerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationReducerApp.swift; sourceTree = "<group>"; };
+		21A92C96298E6AB700868955 /* RoutingReducerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoutingReducerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		21A92C99298E6AB700868955 /* RoutingReducerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingReducerApp.swift; sourceTree = "<group>"; };
 		21A92C9D298E6AB900868955 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21A92CA0298E6AB900868955 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		21C774272993DCC700C326CD /* Landing.Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Landing.Router.swift; sourceTree = "<group>"; };
@@ -38,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				216D04A8298EB66600853743 /* NavigationReducer in Frameworks */,
+				21CE96FF299645F600BECC1F /* RoutingReducer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				216D04A4298EB4B600853743 /* Packages */,
-				21A92C98298E6AB700868955 /* NavigationReducerApp */,
+				21A92C98298E6AB700868955 /* RoutingReducerApp */,
 				21A92C97298E6AB700868955 /* Products */,
 				216D049A298E6B3000853743 /* Frameworks */,
 			);
@@ -73,20 +73,20 @@
 		21A92C97298E6AB700868955 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				21A92C96298E6AB700868955 /* NavigationReducerApp.app */,
+				21A92C96298E6AB700868955 /* RoutingReducerApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		21A92C98298E6AB700868955 /* NavigationReducerApp */ = {
+		21A92C98298E6AB700868955 /* RoutingReducerApp */ = {
 			isa = PBXGroup;
 			children = (
-				21A92C99298E6AB700868955 /* NavigationReducerApp.swift */,
+				21A92C99298E6AB700868955 /* RoutingReducerApp.swift */,
 				21C774342993E83500C326CD /* NavigationFlows */,
 				21A92C9D298E6AB900868955 /* Assets.xcassets */,
 				21A92C9F298E6AB900868955 /* Preview Content */,
 			);
-			path = NavigationReducerApp;
+			path = RoutingReducerApp;
 			sourceTree = "<group>";
 		};
 		21A92C9F298E6AB900868955 /* Preview Content */ = {
@@ -137,9 +137,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		21A92C95298E6AB700868955 /* NavigationReducerApp */ = {
+		21A92C95298E6AB700868955 /* RoutingReducerApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21A92CA4298E6AB900868955 /* Build configuration list for PBXNativeTarget "NavigationReducerApp" */;
+			buildConfigurationList = 21A92CA4298E6AB900868955 /* Build configuration list for PBXNativeTarget "RoutingReducerApp" */;
 			buildPhases = (
 				21A92C92298E6AB700868955 /* Sources */,
 				21A92C93298E6AB700868955 /* Frameworks */,
@@ -149,12 +149,12 @@
 			);
 			dependencies = (
 			);
-			name = NavigationReducerApp;
+			name = RoutingReducerApp;
 			packageProductDependencies = (
-				216D04A7298EB66600853743 /* NavigationReducer */,
+				21CE96FE299645F600BECC1F /* RoutingReducer */,
 			);
 			productName = NavigationReducer;
-			productReference = 21A92C96298E6AB700868955 /* NavigationReducerApp.app */;
+			productReference = 21A92C96298E6AB700868955 /* RoutingReducerApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -172,7 +172,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 21A92C91298E6AB700868955 /* Build configuration list for PBXProject "NavigationReducerApp" */;
+			buildConfigurationList = 21A92C91298E6AB700868955 /* Build configuration list for PBXProject "RoutingReducerApp" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -188,7 +188,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				21A92C95298E6AB700868955 /* NavigationReducerApp */,
+				21A92C95298E6AB700868955 /* RoutingReducerApp */,
 			);
 		};
 /* End PBXProject section */
@@ -214,7 +214,7 @@
 				21C7742D2993DE8E00C326CD /* First.swift in Sources */,
 				21C7742F2993DEC200C326CD /* Second.swift in Sources */,
 				21C7742B2993DD2500C326CD /* Landing.swift in Sources */,
-				21A92C9A298E6AB700868955 /* NavigationReducerApp.swift in Sources */,
+				21A92C9A298E6AB700868955 /* RoutingReducerApp.swift in Sources */,
 				21C774322993DF7E00C326CD /* Modal.swift in Sources */,
 				216D04AC2991073A00853743 /* Modal.Router.swift in Sources */,
 			);
@@ -400,7 +400,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		21A92C91298E6AB700868955 /* Build configuration list for PBXProject "NavigationReducerApp" */ = {
+		21A92C91298E6AB700868955 /* Build configuration list for PBXProject "RoutingReducerApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21A92CA2298E6AB900868955 /* Debug */,
@@ -409,7 +409,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		21A92CA4298E6AB900868955 /* Build configuration list for PBXNativeTarget "NavigationReducerApp" */ = {
+		21A92CA4298E6AB900868955 /* Build configuration list for PBXNativeTarget "RoutingReducerApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				21A92CA5298E6AB900868955 /* Debug */,
@@ -432,9 +432,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		216D04A7298EB66600853743 /* NavigationReducer */ = {
+		21CE96FE299645F600BECC1F /* RoutingReducer */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = NavigationReducer;
+			productName = RoutingReducer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

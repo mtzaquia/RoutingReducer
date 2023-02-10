@@ -4,8 +4,8 @@
 //
 
 import ComposableArchitecture
-import NavigationReducer
 import SwiftUI
+import RoutingReducer
 
 struct ModalRouter: RoutingReducerProtocol {
     enum Route: Routing {

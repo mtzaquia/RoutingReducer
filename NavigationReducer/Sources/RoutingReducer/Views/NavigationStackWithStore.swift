@@ -6,6 +6,31 @@
 import SwiftUI
 import ComposableArchitecture
 
+/// A view capable of handling navigation described in a ``RoutingReducerProtocol``.
+///
+/// This view uses a `NavigationStack` to manage a navigation and modals attached to it.
+/// For iOS 15, see ``NavigationControllerWithStore`` instead.
+///
+/// Usage:
+/// ```
+/// NavigationStackWithStore<SomeRouter, _, _>(
+///     store: store,
+///     rootView: RootView.init
+/// ) { store in
+///     SwitchStore(store) {
+///         CaseLet(
+///             state: /SomeRouter.Route.first,
+///             action: SomeRouter.Route.RouteAction.first,
+///             then: FirstView.init
+///         )
+///         CaseLet(
+///             state: /LandingRouter.Route.modalRouter,
+///             action: LandingRouter.Route.RouteAction.modalRouter,
+///             then: ModalRouterView.init
+///         )
+///     }
+/// }
+/// ```
 @available(iOS 16, *)
 public struct NavigationStackWithStore<
     Reducer: RoutingReducerProtocol,
@@ -21,6 +46,13 @@ public struct NavigationStackWithStore<
     let rootView: Root
     let routeViews: (Store<RouteState, RouteAction>) -> Route
 
+    /// Creates a new instance of ``NavigationStackWithStore``.
+    ///
+    /// - Parameters:
+    ///   - store: The `Store` of a reducer conforming to ``RoutingReducerProtocol``.
+    ///   - rootView: The root `SwiftUI.View` for this flow.
+    ///   - routeViews: A `SwitchStore` with `CaseLet` views for every possible route
+    ///   described in your routes for this flow.
     public init(
         store: StoreOf<Reducer>,
         @ViewBuilder rootView: (Store<RootState, RootAction>) -> Root,
@@ -73,13 +105,8 @@ public struct NavigationStackWithStore<
             }
         }
     }
-}
 
-// MARK: - Private resolutions
-
-@available(iOS 16, *)
-private extension NavigationStackWithStore {
-    func navigationView(id: Reducer.State.Route.ID) -> some View {
+    private func navigationView(id: Reducer.State.Route.ID) -> some View {
         IfLetStore(
             store.scope(
                 state: replayNonNil({ $0.navigation.routePath.first(where: { $0.id == id }) }),

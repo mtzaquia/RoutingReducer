@@ -4,11 +4,9 @@
 //
 
 import SwiftUI
-import ComposableArchitecture
-import NavigationReducer
 
 @main
-struct NavigationReducerApp: App {
+struct RoutingReducerApp: App {
     var body: some Scene {
         WindowGroup {
             LandingRouterView(

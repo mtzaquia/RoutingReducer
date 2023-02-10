@@ -5,7 +5,7 @@
 
 import SwiftUI
 import ComposableArchitecture
-import NavigationReducer
+import RoutingReducer
 
 struct Landing: ReducerProtocol {
     struct State: RoutedState {

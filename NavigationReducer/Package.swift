@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "NavigationReducer",
+    name: "RoutingReducer",
     platforms: [.iOS(.v15)],
     products: [
         .library(
-            name: "NavigationReducer",
-            targets: ["NavigationReducer"]),
+            name: "RoutingReducer",
+            targets: ["RoutingReducer"]),
     ],
     dependencies: [
         .package(
@@ -19,7 +19,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "NavigationReducer",
+            name: "RoutingReducer",
             dependencies: [
                 .product(
                     name: "ComposableArchitecture",

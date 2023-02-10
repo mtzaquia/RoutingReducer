@@ -64,20 +64,9 @@ struct _RoutingReducer<Route: Routing>: ReducerProtocol {
                     state.currentModal = nil
                     return .none
                 case .push(let route):
-//                    if #available(iOS 16, *) {
-//                        state.navigationPath.append(route.id)
-//                    }
-
                     state.routePath.append(route)
-
                     return .none
                 case .pop(let toRoot):
-//                    if #available(iOS 16, *) {
-//                        state.navigationPath.removeLast(
-//                            toRoot ? state.navigationPath.count : min(state.navigationPath.count, 1)
-//                        )
-//                    }
-
                     state.routePath.removeLast(
                         toRoot ? state.routePath.count : min(state.routePath.count, 1)
                     )
@@ -95,23 +84,8 @@ struct _RoutingReducer<Route: Routing>: ReducerProtocol {
                         state.routePath.removeLast(difference)
                     }
 
-//                    if #available(iOS 16, *) {
-//                        guard let navigationPath = navigationPath as? NavigationPath else {
-//                            return .none
-//                        }
-//
-//
-//                    }
-//
                     return .none
-                case .binding: //(let action):
-//                    if #available(iOS 16, *) {
-//                        let difference = state.routePath.count - state.navigationPath.count
-//                        if action.keyPath == \.$navigationPath, difference > 0 {
-//                            state.routePath.removeLast(difference)
-//                        }
-//                    }
-
+                case .binding:
                     return .none
             }
         }
