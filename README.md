@@ -28,7 +28,7 @@ _..._
 
 ## License
 
-Copyright (c) 2021 @mtzaquia
+Copyright (c) 2023 @mtzaquia
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
