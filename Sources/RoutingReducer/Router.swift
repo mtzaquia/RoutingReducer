@@ -22,6 +22,47 @@
 
 import ComposableArchitecture
 
+/// A reducer that should be the top-level of a ``RoutingReducerProtocol``'s `body`.
+///
+/// This is responsible for orchestrating navigation actions at the top-level of the flow,
+/// as well as indicating which reducer should be used for root and what are all the other
+/// reducers involved in the flow.
+///
+/// Usage:
+/// ```
+/// Router { action in
+///     switch action {
+///         case .root(let rootAction):
+///             case .presentModal:
+///                 return .present(.modalRouter(.init(root: .init())))
+///             // handle other root actions...
+///
+///         case .modalRoute(let modalAction):
+///             // handle modal actions...
+///
+///         case .route(_, let routeAction):
+///             // handle route actions...
+///
+///         default: break
+///     }
+///
+///     // nil implies no navigation should take place.
+///     return nil
+/// } rootReducer: {
+///     MyRootReducer()
+/// } routeReducer: {
+///     Scope(
+///         state: /Route.first,
+///         action: /Route.RouteAction.first,
+///         First.init
+///     )
+///     Scope(
+///         state: /Route.modalRouter,
+///         action: /Route.RouteAction.modalRouter,
+///         ModalRouter.init
+///     )
+/// }
+/// ```
 public struct Router<
     Route: Routing,
     State: RoutingState,
@@ -35,6 +76,14 @@ public struct Router<
     private let rootReducer: () -> RootReducer
     private let routeReducer: () -> RouteReducer
 
+    /// Creates a new instance of ``Router``.
+    ///
+    /// - Parameters:
+    ///   - handler: A closure receiving actions from the entire flow and
+    ///   returning the appropriate navigation, or `nil` for no navigation.
+    ///   - rootReducer: An instance of the root reducer of this flow.
+    ///   - routeReducer: A combination of scoped reducers for all possible
+    ///   routes in your flow.
     public init(
         _ handler: @escaping Handler,
         @ReducerBuilder<State.RootState, Action.RootAction> rootReducer: @escaping () -> RootReducer,
