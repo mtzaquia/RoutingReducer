@@ -110,7 +110,40 @@ enum Route: Routing {
 
 ### NavigationStackWithStore (iOS 16+) / NavigationControllerWithStore (iOS 15)
 
-_..._
+The views used for installing and displaying a flow are `NavigationStackWithStore` (iOS 16+) and a backwards-compatible `NavigationControllerWithStore` (iOS 15).
+
+These views receive the appropriate store of your `RoutingReducerProtocol` and, similarly to the Router, the root view and the "scoped" views for all available routes.
+
+Most commonly, usages of this view will follow the pattern below:
+
+```swift
+struct MyRouterView: View {
+    let store: StoreOf<MyRouter>
+    var body: some View {
+        // for now, you need to declare the `Routing` type explicitly.
+        NavigationStackWithStore<MyRouter, _, _>(
+            store: store,
+            // The root view receives the scoped store of `MyRouter`s root state and root action 
+            rootView: MyRootView.init 
+        ) { store in
+            SwitchStore(store) {
+                CaseLet(
+                    state: /MyRouter.Route.first,
+                    action: MyRouter.Route.RouteAction.first,
+                    then: FirstView.init
+                )
+                // Other case views for all routes declared...
+            }
+        }
+    }
+}
+```
+
+## Known limitations and issues
+
+- It is currently not possible to make other types of modal presentation, rather than `.sheet(...)`, without modifying the contents of library itself.
+- The need for `.modalRoute` and `.route` to be declared as part of the `RoutingAction` conformance would preferably be dropped in favour of `.route` only, however making the `ID` optional has unwanted side-effects when using the `.forEach` method on reducers.
+- There are compiler challenges when auto-completing the `Router`'s resolution closure, as well as infering the type of `Routing` when declaring `NavigationStackWithStore`/`NavigationControllerWithStore` instances.
 
 ## License
 
