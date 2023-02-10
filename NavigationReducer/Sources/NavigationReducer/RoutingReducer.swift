@@ -9,7 +9,6 @@ import ComposableArchitecture
 public enum RoutingReducer<Route: Routing> {
     /// A built-in routing reducer state, usually held by your ``RoutingState``.
     public struct State: Equatable, Hashable {
-        @BindingState var navigationPath: NavigationPath
         @BindingState var routePath: IdentifiedArrayOf<Route>
         var currentModal: Route?
 
@@ -22,23 +21,30 @@ public enum RoutingReducer<Route: Routing> {
             routePath: IdentifiedArrayOf<Route> = .init(),
             currentModal: Route? = nil
         ) {
-            self.navigationPath = .init(routePath.elements.map(\.id))
             self.routePath = routePath
             self.currentModal = currentModal
-        }
-
-        public func hash(into hasher: inout Hasher) {
-            hasher.combine(routePath)
-            hasher.combine(currentModal)
         }
     }
 
     /// A built-in routing reducer action, usually held by your ``RoutingState``.
     public enum Action: BindableAction {
+        /// For internal use only. **Do not** call this action directly.
+        case _updateNavigationPath(Any)
+        /// For internal use only. **Do not** call this action directly.
         case binding(BindingAction<State>)
+
+        /// Pushes a new route onto the stack.
+        /// - Parameter route: The ``Route`` to be pushed.
         case push(Route)
+        /// Pops a single route from the stack, or goes to root.
+        /// - Parameter toRoot: A flag indicating if all routes
+        /// should be popped. Defaults to `false`.
         case pop(toRoot: Bool = false)
+        /// Presents a route modally.
+        /// - Parameter route: The ``Route`` to be modally presented.
         case present(Route)
+        /// Dismisses the currently, modally presented route. Does nothing if no modal
+        /// is currently presented.
         case dismiss
     }
 }
@@ -58,22 +64,53 @@ struct _RoutingReducer<Route: Routing>: ReducerProtocol {
                     state.currentModal = nil
                     return .none
                 case .push(let route):
-                    state.navigationPath.append(route.id)
+//                    if #available(iOS 16, *) {
+//                        state.navigationPath.append(route.id)
+//                    }
+
                     state.routePath.append(route)
+
                     return .none
                 case .pop(let toRoot):
-                    state.navigationPath.removeLast(
-                        toRoot ? state.navigationPath.count : min(state.navigationPath.count, 1)
-                    )
+//                    if #available(iOS 16, *) {
+//                        state.navigationPath.removeLast(
+//                            toRoot ? state.navigationPath.count : min(state.navigationPath.count, 1)
+//                        )
+//                    }
+
                     state.routePath.removeLast(
                         toRoot ? state.routePath.count : min(state.routePath.count, 1)
                     )
+
                     return .none
-                case .binding(let action):
-                    let difference = state.routePath.count - state.navigationPath.count
-                    if action.keyPath == \.$navigationPath, difference > 0 {
+                case ._updateNavigationPath(let navigationPath):
+                    guard #available(iOS 16, *),
+                          let navigationPath = navigationPath as? NavigationPath
+                    else {
+                        return .none
+                    }
+
+                    let difference = state.routePath.count - navigationPath.count
+                    if difference > 0 {
                         state.routePath.removeLast(difference)
                     }
+
+//                    if #available(iOS 16, *) {
+//                        guard let navigationPath = navigationPath as? NavigationPath else {
+//                            return .none
+//                        }
+//
+//
+//                    }
+//
+                    return .none
+                case .binding: //(let action):
+//                    if #available(iOS 16, *) {
+//                        let difference = state.routePath.count - state.navigationPath.count
+//                        if action.keyPath == \.$navigationPath, difference > 0 {
+//                            state.routePath.removeLast(difference)
+//                        }
+//                    }
 
                     return .none
             }

@@ -74,7 +74,8 @@ struct ModalRouter: RoutingReducerProtocol {
 struct ModalRouterView: View {
     let store: StoreOf<ModalRouter>
     var body: some View {
-        NavigationStackWithStore<ModalRouter, _, _>(
+//        NavigationStackWithStore<ModalRouter, _, _>(
+        NavigationControllerWithStore<ModalRouter, _, _>(
             store: store,
             rootView: ModalView.init
         ) { store in

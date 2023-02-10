@@ -7,6 +7,7 @@ import UIKit
 import SwiftUI
 import ComposableArchitecture
 
+@available(iOS, obsoleted: 16, renamed: "NavigationStackWithStore")
 public struct NavigationControllerWithStore<
     Reducer: RoutingReducerProtocol,
     Root: View,
@@ -122,12 +123,7 @@ private struct _NavigationControllerWithStore<
                 skipSuper: true
             )
 
-            print("routePath.count:", routePath.count)
-            let adjustedIndex = index //- 1 // routePath is 0 based, viewControllers is 1 based (there's always a root)
-            print("adjustedIndex:", adjustedIndex)
-            routePath.removeLast(routePath.count - adjustedIndex)
-
-            print(routePath.map(\.id).map(AnyHashable.init))
+            routePath.removeLast(routePath.count - index)
         }
     }
 
@@ -138,8 +134,6 @@ private struct _NavigationControllerWithStore<
         guard viewState != controllerState else {
             return
         }
-
-        print(routePath.map(\.id).map(AnyHashable.init))
 
         if viewState.count > controllerState.count {
             for i in controllerState.count..<viewState.count {

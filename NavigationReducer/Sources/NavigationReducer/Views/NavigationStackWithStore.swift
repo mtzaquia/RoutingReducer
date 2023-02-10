@@ -6,6 +6,7 @@
 import SwiftUI
 import ComposableArchitecture
 
+@available(iOS 16, *)
 public struct NavigationStackWithStore<
     Reducer: RoutingReducerProtocol,
     Root: View,
@@ -38,12 +39,13 @@ public struct NavigationStackWithStore<
     public var body: some View {
         WithViewStore(store) { viewStore in
             NavigationStack(
-                path: ViewStore(
-                    store.scope(
-                        state: \.navigation,
-                        action: Reducer.Action.navigation
-                    )
-                ).binding(\.$navigationPath)
+                path: .init(
+                    get: {
+                        .init(viewStore.navigation.routePath.map(\.id))
+                    }, set: {
+                        viewStore.send(.navigation(._updateNavigationPath($0)))
+                    }
+                )
             ) {
                 rootView
                 .navigationDestination(
@@ -75,6 +77,7 @@ public struct NavigationStackWithStore<
 
 // MARK: - Private resolutions
 
+@available(iOS 16, *)
 private extension NavigationStackWithStore {
     func navigationView(id: Reducer.State.Route.ID) -> some View {
         IfLetStore(
