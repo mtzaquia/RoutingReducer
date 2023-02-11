@@ -28,8 +28,85 @@ import ComposableArchitecture
 ///     - The `State` of this reducer **must** conform to ``RoutingState``.
 ///     - The `Action` of this reducer **must** conform to ``RoutingAction``.
 ///     - The `Route` of `State` and `Action` must match.
-public protocol RoutingReducerProtocol<Route>: ReducerProtocol
+///
+/// Usage:
+/// ```
+/// struct MyRouter: RoutingReducerProtocol {
+///     enum Route: Routing {
+///         // all route cases with their states...
+///
+///         enum RouteAction {
+///             // all route cases with their actions...
+///         }
+///
+///         var id: UUID {
+///             // a custom logic to identify routes...
+///         }
+///     }
+///
+///     struct State: RoutingState {
+///         let id = UUID()
+///         var navigation: Route.NavigationState = .init()
+///         var root: MyRootReducer.State
+///     }
+///
+///     enum Action: RoutingAction {
+///         case navigation(Route.NavigationAction)
+///         case route(UUID, Route.RouteAction)
+///         case modalRoute(Route.RouteAction)
+///         case root(MyRootReducer.Action)
+///     }
+///
+///     var rootBody: some RootReducer<Self> {
+///         // your root reducer...
+///     }
+///
+///     var routeBody: some RouteReducer<Self> {
+///         // your scoped reducers for all possible routes declared in `Route`...
+///     }
+///
+///     func navigation(for action: Action) -> Route.NavigationAction? {
+///         // your logic to bridge reducer actions to navigation actions...
+///     }
+/// }
+/// ```
+public protocol RoutingReducerProtocol<
+    Route,
+    RootReducer,
+    RouteReducer
+>: ReducerProtocol
 where State: RoutingState, Action: RoutingAction, State.Route == Route, Action.Route == Route {
     /// The ``Routing`` type this reducer interacts with.
     associatedtype Route: Routing
+
+    /// The `ReducerProtocol` type handling your root view.
+    associatedtype RootReducer: ReducerProtocol<State.RootState, Action.RootAction>
+    /// The `ReducerProtocol` type handling all the possible routes in this flow.
+    associatedtype RouteReducer: ReducerProtocol<Route, Route.RouteAction>
+
+    /// The `ReducerProtocol` to handle your root view.
+    @ReducerBuilder<State.RootState, Action.RootAction>
+    var rootBody: RootReducer { get }
+
+    /// The `ReducerProtocol` to handle all the possible routes in this flow.
+    @ReducerBuilder<Route, Route.RouteAction>
+    var routeBody: RouteReducer { get }
+
+    /// This function should return the appropriate navigation action based on the
+    /// input action from one of the reducers within the flow.
+
+    /// - Parameter action: The `Action` received by any of the reducers described in the flow.
+    /// - Returns: The navigation action that should take place, or `nil` if no navigation should
+    /// happen.
+    func navigation(for action: Action) -> Route.NavigationAction?
+}
+
+public extension RoutingReducerProtocol {
+    var body: some ReducerProtocol<State, Action> {
+        Router(
+            navigation(for:),
+            rootReducer: { rootBody },
+            routeReducer: { routeBody }
+        )
+    }
 }

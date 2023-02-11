@@ -58,54 +58,56 @@ struct LandingRouter: RoutingReducerProtocol {
         case root(Landing.Action)
     }
 
-    var body: some ReducerProtocol<State, Action> {
-        Router { action in
-            switch action {
-                case .root(let rootAction):
-                    switch rootAction {
-                        case .pushFirst: return .push(.first(.init(isModal: false)))
-                        case .presentModal: return .present(.modalRouter(.init(root: .init())))
-                        default: break
-                    }
+    var rootBody: some RootReducer<Self> {
+        Landing()
+    }
 
-                case .modalRoute(let modalAction):
-                    switch modalAction {
-                        case .modalRouter(.root(.dismiss)): return .dismiss
-                        default: break
-                    }
+    var routeBody: some RouteReducer<Self> {
+        Scope(
+            state: /Route.first,
+            action: /Route.RouteAction.first,
+            First.init
+        )
+        Scope(
+            state: /Route.second,
+            action: /Route.RouteAction.second,
+            Second.init
+        )
+        Scope(
+            state: /Route.modalRouter,
+            action: /Route.RouteAction.modalRouter,
+            ModalRouter.init
+        )
+    }
 
-                case .route(_, let routeAction):
-                    switch routeAction {
-                        case .first(.pushSecond): return .push(.second(.init()))
-                        case .first(.popToLanding): return .pop()
-                        case .second(.popToFirst): return .pop()
-                        case .second(.popToRoot): return .pop(toRoot: true)
-                        default: break
-                    }
+    func navigation(for action: Action) -> Route.NavigationAction? {
+        switch action {
+            case .root(let rootAction):
+                switch rootAction {
+                    case .pushFirst: return .push(.first(.init(isModal: false)))
+                    case .presentModal: return .present(.modalRouter(.init(root: .init())))
+                    default: break
+                }
 
-                default: break
-            }
+            case .modalRoute(let modalAction):
+                switch modalAction {
+                    case .modalRouter(.root(.dismiss)): return .dismiss
+                    default: break
+                }
 
-            return nil
-        } rootReducer: {
-            Landing()
-        } routeReducer: {
-            Scope(
-                state: /Route.first,
-                action: /Route.RouteAction.first,
-                First.init
-            )
-            Scope(
-                state: /Route.second,
-                action: /Route.RouteAction.second,
-                Second.init
-            )
-            Scope(
-                state: /Route.modalRouter,
-                action: /Route.RouteAction.modalRouter,
-                ModalRouter.init
-            )
+            case .route(_, let routeAction):
+                switch routeAction {
+                    case .first(.pushSecond): return .push(.second(.init()))
+                    case .first(.popToLanding): return .pop()
+                    case .second(.popToFirst): return .pop()
+                    case .second(.popToRoot): return .pop(toRoot: true)
+                    default: break
+                }
+
+            default: break
         }
+
+        return nil
     }
 }
 

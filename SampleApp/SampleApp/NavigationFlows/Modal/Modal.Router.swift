@@ -53,38 +53,36 @@ struct ModalRouter: RoutingReducerProtocol {
         case root(Modal.Action)
     }
 
-    var body: some ReducerProtocol<State, Action> {
-        Router { action in
-            switch action {
-                case .root(let rootAction):
-                    switch rootAction {
-                        case .presentAnother: return .present(.first(.init(isModal: true)))
-                        default: break
-                    }
+    var rootBody: some RootReducer<Self> {
+        Modal()
+    }
 
-                case .modalRoute(let modalAction):
-                    switch modalAction {
-                        case .first(.dismiss): return .dismiss
-                        default: break
-                    }
-                    
-                default: break
-            }
+    var routeBody: some RouteReducer<Self> {
+        Scope(
+            state: /Route.first,
+            action: /Route.RouteAction.first,
+            First.init
+        )
+    }
 
-            return nil
-        } rootReducer: {
-            Modal()
-        } routeReducer: {
-            Scope(
-                state: /Route.first,
-                action: /Route.RouteAction.first,
-                First.init
-            )
+    func navigation(for action: Action) -> Route.NavigationAction? {
+        switch action {
+            case .root(let rootAction):
+                switch rootAction {
+                    case .presentAnother: return .present(.first(.init(isModal: true)))
+                    default: break
+                }
+
+            case .modalRoute(let modalAction):
+                switch modalAction {
+                    case .first(.dismiss): return .dismiss
+                    default: break
+                }
+
+            default: break
         }
-        BindingReducer()
-        Reduce { state, action in
-            return .none
-        }
+
+        return nil
     }
 }
 
