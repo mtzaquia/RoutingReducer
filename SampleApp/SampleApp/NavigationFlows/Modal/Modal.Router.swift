@@ -28,7 +28,7 @@ struct ModalRouter: RoutingReducerProtocol {
     enum Route: Routing {
         case first(First.State)
 
-        enum RouteAction {
+        enum Action {
             case first(First.Action)
         }
 
@@ -47,8 +47,8 @@ struct ModalRouter: RoutingReducerProtocol {
 
     enum Action: RoutingAction, BindableAction {
         case navigation(Route.NavigationAction)
-        case route(Route.ID, Route.RouteAction)
-        case modalRoute(Route.RouteAction)
+        case route(Route.ID, Route.Action)
+        case modalRoute(Route.Action)
         case binding(BindingAction<State>)
         case root(Modal.Action)
     }
@@ -60,7 +60,7 @@ struct ModalRouter: RoutingReducerProtocol {
     var routeBody: some RouteReducer<Self> {
         Scope(
             state: /Route.first,
-            action: /Route.RouteAction.first,
+            action: /Route.Action.first,
             First.init
         )
     }
@@ -97,7 +97,7 @@ struct ModalRouterView: View {
             SwitchStore(store) {
                 CaseLet(
                     state: /ModalRouter.Route.first,
-                    action: ModalRouter.Route.RouteAction.first,
+                    action: ModalRouter.Route.Action.first,
                     then: FirstView.init
                 )
             }

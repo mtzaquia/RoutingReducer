@@ -39,8 +39,8 @@ import ComposableArchitecture
 ///
 ///     enum Action: RoutingAction {
 ///         case navigation(Route.NavigationAction)
-///         case route(UUID, Route.RouteAction) // `UUID` could be any other `Hashable` type.
-///         case modalRoute(Route.RouteAction)
+///         case route(UUID, Route.Action) // `UUID` could be any other `Hashable` type.
+///         case modalRoute(Route.Action)
 ///         case root(MyRootReducer.Action)
 ///     }
 ///
@@ -56,9 +56,9 @@ public protocol RoutingAction {
     /// An action that navigates based on a given command.
     static func navigation(_ action: Route.NavigationAction) -> Self
     /// An action that holds actions beloging to the routes, described in a ``Routing`` type.
-    static func route(_ id: Route.ID, _ action: Route.RouteAction) -> Self
+    static func route(_ id: Route.ID, _ action: Route.Action) -> Self
     /// An action that holds actions beloging to a modal route, described in a ``Routing`` type.
-    static func modalRoute(_ action: Route.RouteAction) -> Self
+    static func modalRoute(_ action: Route.Action) -> Self
     /// An action that holds actions belonging to the root reducer of this flow.
     static func root(_ action: RootAction) -> Self
 }

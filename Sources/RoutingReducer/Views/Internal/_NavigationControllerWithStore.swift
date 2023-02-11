@@ -28,11 +28,6 @@ struct _NavigationControllerWithStore<
     Root: View,
     Route: View
 >: UIViewControllerRepresentable {
-    typealias RootState = Reducer.State.RootState
-    typealias RootAction = Reducer.Action.RootAction
-    typealias RouteState = Reducer.Action.Route
-    typealias RouteAction = Reducer.Action.Route.RouteAction
-
     @Binding var routePath: IdentifiedArrayOf<Reducer.Route>
     let rootView: Root
     let viewForRoute: (Reducer.Route) -> Route

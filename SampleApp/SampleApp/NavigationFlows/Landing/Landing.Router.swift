@@ -30,7 +30,7 @@ struct LandingRouter: RoutingReducerProtocol {
         case second(Second.State)
         case modalRouter(ModalRouter.State)
 
-        enum RouteAction {
+        enum Action {
             case first(First.Action)
             case second(Second.Action)
             case modalRouter(ModalRouter.Action)
@@ -53,8 +53,8 @@ struct LandingRouter: RoutingReducerProtocol {
     
     enum Action: RoutingAction {
         case navigation(Route.NavigationAction)
-        case route(UUID, Route.RouteAction)
-        case modalRoute(Route.RouteAction)
+        case route(UUID, Route.Action)
+        case modalRoute(Route.Action)
         case root(Landing.Action)
     }
 
@@ -65,17 +65,17 @@ struct LandingRouter: RoutingReducerProtocol {
     var routeBody: some RouteReducer<Self> {
         Scope(
             state: /Route.first,
-            action: /Route.RouteAction.first,
+            action: /Route.Action.first,
             First.init
         )
         Scope(
             state: /Route.second,
-            action: /Route.RouteAction.second,
+            action: /Route.Action.second,
             Second.init
         )
         Scope(
             state: /Route.modalRouter,
-            action: /Route.RouteAction.modalRouter,
+            action: /Route.Action.modalRouter,
             ModalRouter.init
         )
     }
@@ -122,17 +122,17 @@ struct LandingRouterView: View {
             SwitchStore(store) {
                 CaseLet(
                     state: /LandingRouter.Route.first,
-                    action: LandingRouter.Route.RouteAction.first,
+                    action: LandingRouter.Route.Action.first,
                     then: FirstView.init
                 )
                 CaseLet(
                     state: /LandingRouter.Route.second,
-                    action: LandingRouter.Route.RouteAction.second,
+                    action: LandingRouter.Route.Action.second,
                     then: SecondView.init
                 )
                 CaseLet(
                     state: /LandingRouter.Route.modalRouter,
-                    action: LandingRouter.Route.RouteAction.modalRouter,
+                    action: LandingRouter.Route.Action.modalRouter,
                     then: ModalRouterView.init
                 )
             }

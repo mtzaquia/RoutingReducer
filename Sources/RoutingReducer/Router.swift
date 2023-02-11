@@ -27,7 +27,7 @@ struct Router<
     State: RoutingState,
     Action: RoutingAction,
     RootReducer: ReducerProtocol<State.RootState, Action.RootAction>,
-    RouteReducer: ReducerProtocol<Route, Route.RouteAction>
+    RouteReducer: ReducerProtocol<Route, Route.Action>
 >: ReducerProtocol where State.Route == Route, Action.Route == Route {
     typealias Handler = (Action) -> Route.NavigationAction?
 
@@ -38,7 +38,7 @@ struct Router<
     init(
         _ handler: @escaping Handler,
         @ReducerBuilder<State.RootState, Action.RootAction> rootReducer: @escaping () -> RootReducer,
-        @ReducerBuilder<Route, Route.RouteAction> routeReducer: @escaping () -> RouteReducer
+        @ReducerBuilder<Route, Route.Action> routeReducer: @escaping () -> RouteReducer
     ) {
         self.handler = handler
         self.rootReducer = rootReducer

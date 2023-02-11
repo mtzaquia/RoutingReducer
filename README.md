@@ -24,7 +24,7 @@ It is essentially a `ReducerProtocol`, but with additional requirements:
 - The `State` must conform to `RoutingState`
 - The `Action` mut conform to `RoutingAction`
 - A type called `Route` must be declared, and it must conform to `Routing`
-- The body must provide an instance of `Router`
+- Instead of `body`, you need to provide `rootBody`, `routeBody` and a function to bridge reducer actions to concrete navigation actions.
 
 ```swift
 struct MyRouter: RoutingReducerProtocol {
@@ -40,25 +40,26 @@ struct MyRouter: RoutingReducerProtocol {
     
     enum Action: RoutingAction {
         case navigation(Route.NavigationAction)
-        case route(UUID, Route.RouteAction)
-        case modalRoute(Route.RouteAction)
+        case route(UUID, Route.Action)
+        case modalRoute(Route.Action)
         case root(MyRoot.Action)
     }
 
-    var body: some ReducerProtocol<State, Action> {
-        Router { action in
-            // a closure resolving reducer actions to a navigation action.
-            return nil
-        } rootReducer: {
-            MyRoot()
-        } routeReducer: {
-            Scope(
-                state: /Route.first,
-                action: /Route.RouteAction.first,
-                First.init
-            )
-            // other scoped reducers for all routes declared... 
-        }
+    var rootBody: some RootReducer<Self> {
+        MyRoot()
+    }
+    
+    var routeBody: some RouteReducer<Self> {
+        Scope(
+            state: /Route.first,
+            action: /Route.Action.first,
+            First.init
+        )
+        // other scoped reducers for all routes declared... 
+    }
+    
+    func navigation(for action: Action) -> Route.NavigationAction? {
+        // a closure resolving reducer actions to a navigation action.
     }
 }
 ```
@@ -76,7 +77,7 @@ enum Route: Routing {
     case first(First.State)
     case second(Second.State)
 
-    enum RouteAction {
+    enum Action {
         case first(First.Action)
         case second(Second.Action)
     }
@@ -96,7 +97,7 @@ Whereas the example below will never allow for `first` to be presented more than
 enum Route: Routing {
     case first(First.State)
 
-    enum RouteAction {
+    enum Action {
         case first(First.Action)
     }
 
@@ -129,7 +130,7 @@ struct MyRouterView: View {
             SwitchStore(store) {
                 CaseLet(
                     state: /MyRouter.Route.first,
-                    action: MyRouter.Route.RouteAction.first,
+                    action: MyRouter.Route.Action.first,
                     then: FirstView.init
                 )
                 // Other case views for all routes declared...

@@ -34,7 +34,7 @@ import ComposableArchitecture
 ///         // nesting another ``RoutingReducerProtocol`` is possible.
 ///         case modalRouter(ModalRouter.State)
 ///
-///         enum RouteAction {
+///         enum Action {
 ///             case first(First.Action)
 ///             // nesting another ``RoutingReducerProtocol`` is possible.
 ///             case modalRouter(ModalRouter.Action)
@@ -68,6 +68,6 @@ public protocol Routing: Equatable, Hashable, Identifiable {
     typealias NavigationAction = RoutingReducer<Self>.Action
 
     /// The set of actions for all possible routes described by this type.
-    associatedtype RouteAction
+    associatedtype Action
 }
 

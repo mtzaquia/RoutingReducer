@@ -35,7 +35,7 @@ import ComposableArchitecture
 ///     enum Route: Routing {
 ///         // all route cases with their states...
 ///
-///         enum RouteAction {
+///         enum Action {
 ///             // all route cases with their actions...
 ///         }
 ///
@@ -52,8 +52,8 @@ import ComposableArchitecture
 ///
 ///     enum Action: RoutingAction {
 ///         case navigation(Route.NavigationAction)
-///         case route(UUID, Route.RouteAction)
-///         case modalRoute(Route.RouteAction)
+///         case route(UUID, Route.Action)
+///         case modalRoute(Route.Action)
 ///         case root(MyRootReducer.Action)
 ///     }
 ///
@@ -82,14 +82,14 @@ where State: RoutingState, Action: RoutingAction, State.Route == Route, Action.R
     /// The `ReducerProtocol` type handling your root view.
     associatedtype RootReducer: ReducerProtocol<State.RootState, Action.RootAction>
     /// The `ReducerProtocol` type handling all the possible routes in this flow.
-    associatedtype RouteReducer: ReducerProtocol<Route, Route.RouteAction>
+    associatedtype RouteReducer: ReducerProtocol<Route, Route.Action>
 
     /// The `ReducerProtocol` to handle your root view.
     @ReducerBuilder<State.RootState, Action.RootAction>
     var rootBody: RootReducer { get }
 
     /// The `ReducerProtocol` to handle all the possible routes in this flow.
-    @ReducerBuilder<Route, Route.RouteAction>
+    @ReducerBuilder<Route, Route.Action>
     var routeBody: RouteReducer { get }
 
     /// This function should return the appropriate navigation action based on the

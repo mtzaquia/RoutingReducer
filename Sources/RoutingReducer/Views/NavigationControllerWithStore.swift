@@ -38,12 +38,12 @@ import ComposableArchitecture
 ///     SwitchStore(store) {
 ///         CaseLet(
 ///             state: /SomeRouter.Route.first,
-///             action: SomeRouter.Route.RouteAction.first,
+///             action: SomeRouter.Route.Action.first,
 ///             then: FirstView.init
 ///         )
 ///         CaseLet(
 ///             state: /LandingRouter.Route.modalRouter,
-///             action: LandingRouter.Route.RouteAction.modalRouter,
+///             action: LandingRouter.Route.Action.modalRouter,
 ///             then: ModalRouterView.init
 ///         )
 ///     }
@@ -58,7 +58,7 @@ public struct NavigationControllerWithStore<
     public typealias RootState = Reducer.State.RootState
     public typealias RootAction = Reducer.Action.RootAction
     public typealias RouteState = Reducer.Action.Route
-    public typealias RouteAction = Reducer.Action.Route.RouteAction
+    public typealias RouteAction = Reducer.Action.Route.Action
 
     let store: StoreOf<Reducer>
     let rootView: Root

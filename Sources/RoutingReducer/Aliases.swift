@@ -30,5 +30,5 @@ public typealias RouteReducer<
     RR: RoutingReducerProtocol
 > = ReducerProtocol<
     RR.Route,
-    RR.Route.RouteAction
+    RR.Route.Action
 >
