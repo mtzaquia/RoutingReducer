@@ -70,7 +70,7 @@ The `Routing` protocol defines all available routes for a given flow, and is a r
 
 It is important to mention that routes require an ID. The way the ID is defined will determine whether the same view can be pushed/presented more than once on the same flow. That's why states belonging to a flow must conform to `RoutedState`.
 
-For example, the conformance below allows for the same screen to be pushed multiple times, as it uses the state's ID to identify itself:
+For example, the conformance below allows for the same screen to be pushed multiple times, as it uses the state's ID to identify itself (assuming namely IDs are different):
 
 ```swift
 enum Route: Routing {
@@ -124,7 +124,7 @@ struct MyRouterView: View {
         // for now, you need to declare the `Routing` type explicitly.
         NavigationStackWithStore<MyRouter, _, _>(
             store: store,
-            // The root view receives the scoped store of `MyRouter`s root state and root action 
+            // The root view receives the scoped store of `MyRouter`'s root state and root action 
             rootView: MyRootView.init 
         ) { store in
             SwitchStore(store) {
@@ -143,8 +143,7 @@ struct MyRouterView: View {
 ## Known limitations and issues
 
 - It is currently not possible to make other types of modal presentation, rather than `.sheet(...)`, without modifying the contents of library itself.
-- The need for `.modalRoute` and `.route` to be declared as part of the `RoutingAction` conformance would preferably be dropped in favour of `.route` only, however making the `ID` optional has unwanted side-effects when using the `.forEach` method on reducers.
-- There are compiler challenges when auto-completing the `Router`'s resolution closure, as well as infering the type of `Routing` when declaring `NavigationStackWithStore`/`NavigationControllerWithStore` instances.
+- The compiler fails to infer the reducer type when declaring `NavigationStackWithStore`/`NavigationControllerWithStore` instances.
 
 ## License
 
