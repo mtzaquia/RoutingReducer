@@ -104,7 +104,7 @@ public struct NavigationStackWithStore<
             }
             .sheet(
                 isPresented: .init(
-                    get: { viewStore.state.navigation.currentModal != nil },
+                    get: { viewStore.navigation.currentModal != nil },
                     set: {
                         if !$0 {
                             viewStore.send(.navigation(.dismiss))
@@ -126,7 +126,7 @@ public struct NavigationStackWithStore<
     private func navigationView(id: Reducer.State.Route.ID) -> some View {
         IfLetStore(
             store.scope(
-                state: replayNonNil({ $0.navigation.routePath.first(where: { $0.id == id }) }),
+                state: replayNonNil({ $0.navigation.routePath[id: id] }),
                 action: { Reducer.Action.route(id, $0) }
             ),
             then: routeViews

@@ -23,6 +23,8 @@
 import UIKit
 
 final class _UINavigationControllerWithRoutePath: UINavigationController {
+    var routePathIds = [AnyHashable]()
+
     func pushViewController(
         _ viewController: UIViewController,
         animated: Bool,

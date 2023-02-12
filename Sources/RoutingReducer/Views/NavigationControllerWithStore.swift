@@ -61,6 +61,7 @@ public struct NavigationControllerWithStore<
     public typealias RouteAction = Reducer.Action.Route.Action
 
     let store: StoreOf<Reducer>
+    let barAppearance: UINavigationBarAppearance?
     let rootView: Root
     let routeViews: (Store<RouteState, RouteAction>) -> Route
 
@@ -68,15 +69,19 @@ public struct NavigationControllerWithStore<
     ///
     /// - Parameters:
     ///   - store: The `Store` of a reducer conforming to ``RoutingReducerProtocol``.
+    ///   - barAppearance: An instance of `UINavigationBarAppearance` used to customise the
+    ///   `UINavigationBar` wrapped by this representable.
     ///   - rootView: The root `SwiftUI.View` for this flow.
     ///   - routeViews: A `SwitchStore` with `CaseLet` views for every possible route
     ///   described in your routes for this flow.
     public init(
         store: StoreOf<Reducer>,
+        barAppearance: UINavigationBarAppearance? = nil,
         @ViewBuilder rootView: (Store<RootState, RootAction>) -> Root,
         @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> Route
     ) {
         self.store = store
+        self.barAppearance = barAppearance
         self.rootView = rootView(
             store.scope(
                 state: \.root,
@@ -95,11 +100,12 @@ public struct NavigationControllerWithStore<
                         action: Reducer.Action.navigation
                     )
                 ).binding(\.$routePath),
+                barAppearance: barAppearance,
                 rootView: rootView,
                 viewForRoute: { route in
                     IfLetStore(
                         store.scope(
-                            state: replayNonNil({ $0.navigation.routePath.first(where: { $0.id == route.id }) }),
+                            state: replayNonNil({ $0.navigation.routePath[id: route.id] }),
                             action: { Reducer.Action.route(route.id, $0) }
                         ),
                         then: routeViews
@@ -109,7 +115,7 @@ public struct NavigationControllerWithStore<
             .ignoresSafeArea()
             .sheet(
                 isPresented: .init(
-                    get: { viewStore.state.navigation.currentModal != nil },
+                    get: { viewStore.navigation.currentModal != nil },
                     set: {
                         if !$0 {
                             viewStore.send(.navigation(.dismiss))

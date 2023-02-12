@@ -29,15 +29,18 @@ struct _NavigationControllerWithStore<
     Route: View
 >: UIViewControllerRepresentable {
     @Binding var routePath: IdentifiedArrayOf<Reducer.Route>
+    let barAppearance: UINavigationBarAppearance?
     let rootView: Root
     let viewForRoute: (Reducer.Route) -> Route
 
     init(
         routePath: Binding<IdentifiedArrayOf<Reducer.Route>>,
+        barAppearance: UINavigationBarAppearance? = nil,
         rootView: Root,
         @ViewBuilder viewForRoute: @escaping (Reducer.Route) -> Route
     ) {
         _routePath = routePath
+        self.barAppearance = barAppearance
         self.rootView = rootView
         self.viewForRoute = viewForRoute
     }
@@ -46,11 +49,13 @@ struct _NavigationControllerWithStore<
         let nc = _UINavigationControllerWithRoutePath(rootViewController: UIHostingController(rootView: rootView))
         nc.delegate = context.coordinator
         nc.routePathIds = routePath.map(\.id).map(AnyHashable.init)
+        updateBarAppearance(for: nc)
         return nc
     }
 
     func updateUIViewController(_ uiViewController: _UINavigationControllerWithRoutePath, context: Context) {
         updateNavigationController(uiViewController)
+        updateBarAppearance(for: uiViewController)
     }
 
     func makeCoordinator() -> Coordinator {
@@ -95,6 +100,19 @@ struct _NavigationControllerWithStore<
                 animated: true
             )
         }
+    }
+
+    private func updateBarAppearance(for navigationController: UINavigationController) {
+        let bar = navigationController.navigationBar
+
+        guard let barAppearance else { return }
+
+        bar.compactAppearance = barAppearance
+        bar.standardAppearance = barAppearance
+        bar.scrollEdgeAppearance = barAppearance
+        bar.compactScrollEdgeAppearance = barAppearance
+
+        bar.setNeedsLayout()
     }
 }
 
