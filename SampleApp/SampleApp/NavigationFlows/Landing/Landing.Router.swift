@@ -92,6 +92,8 @@ struct LandingRouter: RoutingReducerProtocol {
             case .modalRoute(let modalAction):
                 switch modalAction {
                     case .modalRouter(.root(.dismiss)): return .dismiss
+                    case .modalRouter(.root(.replace)): return .present(.first(.init(isModal: true)))
+                    case .first(.dismiss): return .dismiss
                     default: break
                 }
 

@@ -103,23 +103,17 @@ public struct NavigationStackWithStore<
                 )
             }
             .sheet(
-                isPresented: .init(
-                    get: { viewStore.navigation.currentModal != nil },
-                    set: {
-                        if !$0 {
-                            viewStore.send(.navigation(.dismiss))
-                        }
-                    }
-                )
-            ) {
-                IfLetStore(
-                    store.scope(
-                        state: replayNonNil(\.navigation.currentModal),
-                        action: Reducer.Action.modalRoute
-                    ),
-                    then: routeViews
-                )
-            }
+                item: ViewStore(store.navigationStore).binding(\.$currentModal),
+                content: { modal in
+                    IfLetStore(
+                        store.scope(
+                            state: replayNonNil({ _ in modal }),
+                            action: Reducer.Action.modalRoute
+                        ),
+                        then: routeViews
+                    )
+                }
+            )
         }
     }
 

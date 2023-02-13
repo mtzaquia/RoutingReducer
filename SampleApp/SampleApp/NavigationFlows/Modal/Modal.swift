@@ -34,12 +34,12 @@ struct Modal: ReducerProtocol {
         case binding(BindingAction<State>)
 
         case presentAnother
+        case replace
         case dismiss
     }
 
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        EmptyReducer()
     }
 }
 
@@ -51,6 +51,11 @@ struct ModalView: View {
                 Button("Present") {
                     vs.send(.presentAnother)
                 }
+
+                Button("Replace") {
+                    vs.send(.replace)
+                }
+                .padding(.top, 16)
 
                 TextField("Input", text: vs.binding(\.$modalText))
                     .padding()

@@ -27,7 +27,7 @@ public enum RoutingReducer<Route: Routing> {
     /// A built-in routing reducer state, usually held by your ``RoutingState``.
     public struct State: Equatable, Hashable {
         @BindingState var routePath: IdentifiedArrayOf<Route>
-        var currentModal: Route?
+        @BindingState var currentModal: Route?
 
         /// Creates a new ``RoutingReducer.State`` for a specific navigation state.
         ///
