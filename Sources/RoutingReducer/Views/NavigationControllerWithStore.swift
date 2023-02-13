@@ -31,7 +31,7 @@ import ComposableArchitecture
 ///
 /// Usage:
 /// ```
-/// NavigationControllerWithStore<SomeRouter, _, _>(
+/// NavigationControllerWithStore(
 ///     store: store,
 ///     rootView: RootView.init
 /// ) { store in
@@ -51,19 +51,20 @@ import ComposableArchitecture
 /// ```
 @available(iOS, obsoleted: 16, renamed: "NavigationStackWithStore")
 public struct NavigationControllerWithStore<
-    Reducer: RoutingReducerProtocol,
-    Root: View,
-    Route: View
->: View {
-    public typealias RootState = Reducer.State.RootState
-    public typealias RootAction = Reducer.Action.RootAction
-    public typealias RouteState = Reducer.Action.Route
-    public typealias RouteAction = Reducer.Action.Route.Action
+    State: RoutingState,
+    Action: RoutingAction,
+    RootView: View,
+    RouteView: View
+>: View where State.Route == Action.Route {
+    public typealias RootState = State.RootState
+    public typealias RootAction = Action.RootAction
+    public typealias RouteState = Action.Route
+    public typealias RouteAction = Action.Route.Action
 
-    let store: StoreOf<Reducer>
+    let store: Store<State, Action>
     let barAppearance: UINavigationBarAppearance?
-    let rootView: Root
-    let routeViews: (Store<RouteState, RouteAction>) -> Route
+    let rootView: RootView
+    let routeViews: (Store<RouteState, RouteAction>) -> RouteView
 
     /// Creates a new instance of ``NavigationControllerWithStore``.
     ///
@@ -75,17 +76,17 @@ public struct NavigationControllerWithStore<
     ///   - routeViews: A `SwitchStore` with `CaseLet` views for every possible route
     ///   described in your routes for this flow.
     public init(
-        store: StoreOf<Reducer>,
+        store: Store<State, Action>,
         barAppearance: UINavigationBarAppearance? = nil,
-        @ViewBuilder rootView: (Store<RootState, RootAction>) -> Root,
-        @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> Route
+        @ViewBuilder rootView: (Store<RootState, RootAction>) -> RootView,
+        @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> RouteView
     ) {
         self.store = store
         self.barAppearance = barAppearance
         self.rootView = rootView(
             store.scope(
                 state: \.root,
-                action: Reducer.Action.root
+                action: Action.root
             )
         )
         self.routeViews = routeViews
@@ -93,7 +94,7 @@ public struct NavigationControllerWithStore<
 
     public var body: some View {
         WithViewStore(store) { viewStore in
-            _NavigationControllerWithStore<Reducer, _, _>(
+            _NavigationControllerWithStore(
                 routePath: ViewStore(store.navigationStore).binding(\.$routePath),
                 barAppearance: barAppearance,
                 rootView: rootView,
@@ -101,7 +102,7 @@ public struct NavigationControllerWithStore<
                     IfLetStore(
                         store.scope(
                             state: replayNonNil({ $0.navigation.routePath[id: route.id] }),
-                            action: { Reducer.Action.route(route.id, $0) }
+                            action: { Action.route(route.id, $0) }
                         ),
                         then: routeViews
                     )
@@ -114,7 +115,7 @@ public struct NavigationControllerWithStore<
                     IfLetStore(
                         store.scope(
                             state: replayNonNil({ _ in modal }),
-                            action: Reducer.Action.modalRoute
+                            action: Action.modalRoute
                         ),
                         then: routeViews
                     )

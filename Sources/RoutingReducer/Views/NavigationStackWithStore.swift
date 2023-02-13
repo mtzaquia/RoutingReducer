@@ -30,7 +30,7 @@ import ComposableArchitecture
 ///
 /// Usage:
 /// ```
-/// NavigationStackWithStore<SomeRouter, _, _>(
+/// NavigationStackWithStore(
 ///     store: store,
 ///     rootView: RootView.init
 /// ) { store in
@@ -50,18 +50,19 @@ import ComposableArchitecture
 /// ```
 @available(iOS 16, *)
 public struct NavigationStackWithStore<
-    Reducer: RoutingReducerProtocol,
-    Root: View,
-    Route: View
->: View {
-    public typealias RootState = Reducer.State.RootState
-    public typealias RootAction = Reducer.Action.RootAction
-    public typealias RouteState = Reducer.Action.Route
-    public typealias RouteAction = Reducer.Action.Route.Action
+    State: RoutingState,
+    Action: RoutingAction,
+    RootView: View,
+    RouteView: View
+>: View where State.Route == Action.Route {
+    public typealias RootState = State.RootState
+    public typealias RootAction = Action.RootAction
+    public typealias RouteState = Action.Route
+    public typealias RouteAction = Action.Route.Action
 
-    let store: StoreOf<Reducer>
-    let rootView: Root
-    let routeViews: (Store<RouteState, RouteAction>) -> Route
+    let store: Store<State, Action>
+    let rootView: RootView
+    let routeViews: (Store<RouteState, RouteAction>) -> RouteView
 
     /// Creates a new instance of ``NavigationStackWithStore``.
     ///
@@ -71,15 +72,15 @@ public struct NavigationStackWithStore<
     ///   - routeViews: A `SwitchStore` with `CaseLet` views for every possible route
     ///   described in your routes for this flow.
     public init(
-        store: StoreOf<Reducer>,
-        @ViewBuilder rootView: (Store<RootState, RootAction>) -> Root,
-        @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> Route
+        store: Store<State, Action>,
+        @ViewBuilder rootView: (Store<RootState, RootAction>) -> RootView,
+        @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> RouteView
     ) {
         self.store = store
         self.rootView = rootView(
             store.scope(
                 state: \.root,
-                action: Reducer.Action.root
+                action: Action.root
             )
         )
         self.routeViews = routeViews
@@ -98,7 +99,7 @@ public struct NavigationStackWithStore<
             ) {
                 rootView
                 .navigationDestination(
-                    for: Reducer.State.Route.ID.self,
+                    for: State.Route.ID.self,
                     destination: navigationView(id:)
                 )
             }
@@ -108,7 +109,7 @@ public struct NavigationStackWithStore<
                     IfLetStore(
                         store.scope(
                             state: replayNonNil({ _ in modal }),
-                            action: Reducer.Action.modalRoute
+                            action: Action.modalRoute
                         ),
                         then: routeViews
                     )
@@ -117,11 +118,11 @@ public struct NavigationStackWithStore<
         }
     }
 
-    private func navigationView(id: Reducer.State.Route.ID) -> some View {
+    private func navigationView(id: State.Route.ID) -> some View {
         IfLetStore(
             store.scope(
                 state: replayNonNil({ $0.navigation.routePath[id: id] }),
-                action: { Reducer.Action.route(id, $0) }
+                action: { Action.route(id, $0) }
             ),
             then: routeViews
         )

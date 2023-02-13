@@ -113,7 +113,7 @@ enum Route: Routing {
 
 The views used for installing and displaying a flow are `NavigationStackWithStore` (iOS 16+) and a backwards-compatible `NavigationControllerWithStore` (iOS 15).
 
-These views receive the appropriate store of your `RoutingReducerProtocol` and, similarly to the Router, the root view and the "scoped" views for all available routes.
+These views receive the appropriate store of your `RoutingReducerProtocol`'s state and action and, similarly to the Router, the root view and the "scoped" views for all available routes.
 
 Most commonly, usages of this view will follow the pattern below:
 
@@ -121,8 +121,7 @@ Most commonly, usages of this view will follow the pattern below:
 struct MyRouterView: View {
     let store: StoreOf<MyRouter>
     var body: some View {
-        // for now, you need to declare the `Routing` type explicitly.
-        NavigationStackWithStore<MyRouter, _, _>(
+        NavigationStackWithStore(
             store: store,
             // The root view receives the scoped store of `MyRouter`'s root state and root action 
             rootView: MyRootView.init 
@@ -143,7 +142,6 @@ struct MyRouterView: View {
 ## Known limitations and issues
 
 - It is currently not possible to make other types of modal presentation, rather than `.sheet(...)`, without modifying the contents of library itself.
-- The compiler fails to infer the reducer type when declaring `NavigationStackWithStore`/`NavigationControllerWithStore` instances.
 
 ## License
 

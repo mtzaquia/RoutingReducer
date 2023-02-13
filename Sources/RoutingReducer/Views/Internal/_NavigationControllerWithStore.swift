@@ -24,20 +24,20 @@ import ComposableArchitecture
 import SwiftUI
 
 struct _NavigationControllerWithStore<
-    Reducer: RoutingReducerProtocol,
-    Root: View,
-    Route: View
+    Route: Routing,
+    RootView: View,
+    RouteView: View
 >: UIViewControllerRepresentable {
-    @Binding var routePath: IdentifiedArrayOf<Reducer.Route>
+    @Binding var routePath: IdentifiedArrayOf<Route>
     let barAppearance: UINavigationBarAppearance?
-    let rootView: Root
-    let viewForRoute: (Reducer.Route) -> Route
+    let rootView: RootView
+    let viewForRoute: (Route) -> RouteView
 
     init(
-        routePath: Binding<IdentifiedArrayOf<Reducer.Route>>,
+        routePath: Binding<IdentifiedArrayOf<Route>>,
         barAppearance: UINavigationBarAppearance? = nil,
-        rootView: Root,
-        @ViewBuilder viewForRoute: @escaping (Reducer.Route) -> Route
+        rootView: RootView,
+        @ViewBuilder viewForRoute: @escaping (Route) -> RouteView
     ) {
         _routePath = routePath
         self.barAppearance = barAppearance
@@ -80,7 +80,7 @@ struct _NavigationControllerWithStore<
 
         if viewState.count > controllerState.count {
             for i in controllerState.count..<viewState.count {
-                guard let routeId = viewState[i].base as? Reducer.Route.ID,
+                guard let routeId = viewState[i].base as? Route.ID,
                       let route = routePath[id: routeId]
                 else {
                     continue
