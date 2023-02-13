@@ -29,7 +29,7 @@ It is essentially a `ReducerProtocol`, but with additional requirements:
 ```swift
 struct MyRouter: RoutingReducerProtocol {
     enum Route: Routing {
-        // the available routes, their actions and IDs. 
+        // the available routes for this reducer, their actions and IDs. 
     }
 
     struct State: RoutingState {
@@ -55,11 +55,11 @@ struct MyRouter: RoutingReducerProtocol {
             action: /Route.Action.first,
             First.init
         )
-        // other scoped reducers for all routes declared... 
+        // other scoped reducers for all routes declared on this reducer... 
     }
     
     func navigation(for action: Action) -> Route.NavigationAction? {
-        // a closure resolving reducer actions to a navigation action.
+        // a closure resolving this reducer's actions to a navigation action.
     }
 }
 ```
