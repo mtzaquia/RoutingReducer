@@ -39,9 +39,6 @@ struct Landing: ReducerProtocol {
     
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
-        Reduce { state, action in
-            return .none
-        }
     }
 }
 
