@@ -141,7 +141,7 @@ struct MyRouterView: View {
 ## Known limitations and issues
 
 - Effect cancellation needs to be handled manually;
-- Dismissing a screen while editing a value with @BindingState will warn of unhandled actions.
+- Dismissing a screen while editing a value with `@BindingState` will warn of unhandled actions.
 
 ## License
 
