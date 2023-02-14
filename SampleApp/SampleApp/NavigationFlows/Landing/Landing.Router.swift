@@ -117,11 +117,10 @@ struct LandingRouterView: View {
     let store: StoreOf<LandingRouter>
     var body: some View {
         WithRoutingStore(store) { rootStore, navigation, modal in
-//            NavigationControllerWithStore(
-            NavigationStackWithStore(
-                navigation: navigation,
-                rootView: { LandingView(store: rootStore) }
-            )
+//            NavigationControllerWithStore(navigation: navigation) {
+            NavigationStackWithStore(navigation: navigation) {
+                LandingView(store: rootStore)
+            }
             .sheet(item: modal.item, content: modal.content)
         } routes: { store in
             SwitchStore(store) {

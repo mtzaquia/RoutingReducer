@@ -30,21 +30,9 @@ import ComposableArchitecture
 ///
 /// Usage:
 /// ```
-/// NavigationStackWithStore(
-///     store: store,
-///     rootView: RootView.init
-/// ) { store in
-///     SwitchStore(store) {
-///         CaseLet(
-///             state: /SomeRouter.Route.first,
-///             action: SomeRouter.Route.Action.first,
-///             then: FirstView.init
-///         )
-///         CaseLet(
-///             state: /LandingRouter.Route.modalRouter,
-///             action: LandingRouter.Route.Action.modalRouter,
-///             then: ModalRouterView.init
-///         )
+/// WithRoutingStore(store) { rootStore, navigation, _ in
+///     NavigationStackWithStore(navigation: navigation) {
+///         RootView(store: rootStore)
 ///     }
 /// }
 /// ```

@@ -90,11 +90,10 @@ struct ModalRouterView: View {
     let store: StoreOf<ModalRouter>
     var body: some View {
         WithRoutingStore(store) { rootStore, navigation, modal in
-            NavigationStackWithStore(
-//            NavigationControllerWithStore(
-                navigation: navigation,
-                rootView: { ModalView(store: rootStore) }
-            )
+//            NavigationControllerWithStore(navigation: navigation) {
+            NavigationStackWithStore(navigation: navigation) {
+                ModalView(store: rootStore)
+            }
             .fullScreenCover(item: modal.item, content: modal.content)
         } routes: { store in
             SwitchStore(store) {
