@@ -6,46 +6,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-public final class Navigation<State: RoutingState, Action: RoutingAction, RouteView: View> where State.Route == Action.Route {
-    let viewStore: ViewStore<State, Action>
-    let routePathBinding: Binding<IdentifiedArrayOf<State.Route>>
-    let content: (State.Route.ID) -> IfLetStore<State.Route, State.Route.Action, RouteView?>
-
-    init(
-        routePathBinding: Binding<IdentifiedArrayOf<State.Route>>,
-        viewStore: ViewStore<State, Action>,
-        content: @escaping (State.Route.ID) -> IfLetStore<State.Route, State.Route.Action, RouteView?>
-    ) {
-        self.routePathBinding = routePathBinding
-        self.viewStore = viewStore
-        self.content = content
-    }
-
-    @available(iOS 16, *)
-    func navigationPathBinding() -> Binding<NavigationPath> {
-        .init(
-            get: {
-                .init(self.routePathBinding.map(\.id))
-            }, set: {
-                self.viewStore.send(.navigation(._updateNavigationPath($0)))
-            }
-        )
-    }
-}
-
-public final class Modal<Route: Routing, RouteView: View> {
-    public let item: Binding<Route?>
-    public let content: (Route) -> IfLetStore<Route, Route.Action, RouteView?>
-
-    init(
-        item: Binding<Route?>,
-        content: @escaping (Route) -> IfLetStore<Route, Route.Action, RouteView?>
-    ) {
-        self.item = item
-        self.content = content
-    }
-}
-
 /// A view that unwraps a store holding a ``RoutingReducerProtocol`` and allows you to build a custom navigation structure.
 ///
 /// You will always receive the `rootStore`, which should be passed to your root view,
