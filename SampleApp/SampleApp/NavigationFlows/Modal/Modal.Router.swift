@@ -89,11 +89,14 @@ struct ModalRouter: RoutingReducerProtocol {
 struct ModalRouterView: View {
     let store: StoreOf<ModalRouter>
     var body: some View {
-        NavigationStackWithStore(
-//        NavigationControllerWithStore(
-            store: store,
-            rootView: ModalView.init
-        ) { store in
+        WithRoutingStore(store) { rootStore, navigation, modal in
+            NavigationStackWithStore(
+//            NavigationControllerWithStore(
+                navigation: navigation,
+                rootView: { ModalView(store: rootStore) }
+            )
+            .fullScreenCover(item: modal.item, content: modal.content)
+        } routes: { store in
             SwitchStore(store) {
                 CaseLet(
                     state: /ModalRouter.Route.first,

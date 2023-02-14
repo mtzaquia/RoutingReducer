@@ -55,76 +55,30 @@ public struct NavigationStackWithStore<
     RootView: View,
     RouteView: View
 >: View where State.Route == Action.Route {
-    public typealias RootState = State.RootState
-    public typealias RootAction = Action.RootAction
-    public typealias RouteState = Action.Route
-    public typealias RouteAction = Action.Route.Action
-
-    let store: Store<State, Action>
+    let navigation: Navigation<State, Action, RouteView>
     let rootView: RootView
-    let routeViews: (Store<RouteState, RouteAction>) -> RouteView
 
     /// Creates a new instance of ``NavigationStackWithStore``.
     ///
     /// - Parameters:
-    ///   - store: The `Store` of a reducer conforming to ``RoutingReducerProtocol``.
+    ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``(...) { ... }`.
     ///   - rootView: The root `SwiftUI.View` for this flow.
-    ///   - routeViews: A `SwitchStore` with `CaseLet` views for every possible route
-    ///   described in your routes for this flow.
     public init(
-        store: Store<State, Action>,
-        @ViewBuilder rootView: (Store<RootState, RootAction>) -> RootView,
-        @ViewBuilder routeViews: @escaping (Store<RouteState, RouteAction>) -> RouteView
+        navigation: Navigation<State, Action, RouteView>,
+        @ViewBuilder rootView: @escaping () -> RootView
     ) {
-        self.store = store
-        self.rootView = rootView(
-            store.scope(
-                state: \.root,
-                action: Action.root
-            )
-        )
-        self.routeViews = routeViews
+        self.navigation = navigation
+        self.rootView = rootView()
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
-            NavigationStack(
-                path: .init(
-                    get: {
-                        .init(viewStore.navigation.routePath.map(\.id))
-                    }, set: {
-                        viewStore.send(.navigation(._updateNavigationPath($0)))
-                    }
-                )
-            ) {
+//        WithViewStore(store) { viewStore in
+            NavigationStack(path: navigation.navigationPathBinding()) {
                 rootView
                 .navigationDestination(
                     for: State.Route.ID.self,
-                    destination: navigationView(id:)
+                    destination: navigation.content
                 )
             }
-            .sheet(
-                item: ViewStore(store.navigationStore).binding(\.$currentModal),
-                content: { modal in
-                    IfLetStore(
-                        store.scope(
-                            state: replayNonNil({ _ in modal }),
-                            action: Action.modalRoute
-                        ),
-                        then: routeViews
-                    )
-                }
-            )
-        }
-    }
-
-    private func navigationView(id: State.Route.ID) -> some View {
-        IfLetStore(
-            store.scope(
-                state: replayNonNil({ $0.navigation.routePath[id: id] }),
-                action: { Action.route(id, $0) }
-            ),
-            then: routeViews
-        )
     }
 }

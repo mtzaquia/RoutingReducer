@@ -116,11 +116,14 @@ struct LandingRouter: RoutingReducerProtocol {
 struct LandingRouterView: View {
     let store: StoreOf<LandingRouter>
     var body: some View {
-        NavigationStackWithStore(
-//        NavigationControllerWithStore(
-            store: store,
-            rootView: LandingView.init
-        ) { store in
+        WithRoutingStore(store) { rootStore, navigation, modal in
+//            NavigationControllerWithStore(
+            NavigationStackWithStore(
+                navigation: navigation,
+                rootView: { LandingView(store: rootStore) }
+            )
+            .sheet(item: modal.item, content: modal.content)
+        } routes: { store in
             SwitchStore(store) {
                 CaseLet(
                     state: /LandingRouter.Route.first,

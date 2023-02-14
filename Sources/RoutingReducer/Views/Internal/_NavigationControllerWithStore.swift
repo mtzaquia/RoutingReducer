@@ -31,13 +31,13 @@ struct _NavigationControllerWithStore<
     @Binding var routePath: IdentifiedArrayOf<Route>
     let barAppearance: UINavigationBarAppearance?
     let rootView: RootView
-    let viewForRoute: (Route) -> RouteView
+    let viewForRoute: (Route.ID) -> RouteView
 
     init(
         routePath: Binding<IdentifiedArrayOf<Route>>,
         barAppearance: UINavigationBarAppearance? = nil,
         rootView: RootView,
-        @ViewBuilder viewForRoute: @escaping (Route) -> RouteView
+        @ViewBuilder viewForRoute: @escaping (Route.ID) -> RouteView
     ) {
         _routePath = routePath
         self.barAppearance = barAppearance
@@ -88,7 +88,7 @@ struct _NavigationControllerWithStore<
 
                 navigationController.pushViewController(
                     UIHostingController(
-                        rootView: viewForRoute(route)
+                        rootView: viewForRoute(route.id)
                     ),
                     animated: true,
                     routeId: routeId
