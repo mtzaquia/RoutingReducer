@@ -117,8 +117,7 @@ struct LandingRouterView: View {
     let store: StoreOf<LandingRouter>
     var body: some View {
         WithRoutingStore(store) { rootStore, navigation, modal in
-//            NavigationControllerWithStore(navigation: navigation) {
-            NavigationStackWithStore(navigation: navigation) {
+            RoutedNavigationStack(navigation: navigation) {
                 LandingView(store: rootStore)
             }
             .sheet(item: modal.item, content: modal.content)

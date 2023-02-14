@@ -109,11 +109,15 @@ enum Route: Routing {
 }
 ```
 
-### NavigationStackWithStore (iOS 16+) / NavigationControllerWithStore (iOS 15)
+### WithRoutingStore
 
-The views used for installing and displaying a flow are `NavigationStackWithStore` (iOS 16+) and a backwards-compatible `NavigationControllerWithStore` (iOS 15).
+_..._
 
-These views receive the appropriate store of your `RoutingReducerProtocol`'s state and action and, similarly to the Router, the root view and the "scoped" views for all available routes.
+### RoutedNavigationStack
+
+The view used for installing and displaying a navigation flow is `RoutedNavigationStack`.
+
+This views receive the appropriate navigation state extracted from your store using `WithRoutingStore` and, similarly to the Router, the root view for the navigation.
 
 Most commonly, usages of this view will follow the pattern below:
 
@@ -121,19 +125,14 @@ Most commonly, usages of this view will follow the pattern below:
 struct MyRouterView: View {
     let store: StoreOf<MyRouter>
     var body: some View {
-        NavigationStackWithStore(
-            store: store,
-            // The root view receives the scoped store of `MyRouter`'s root state and root action 
-            rootView: MyRootView.init 
-        ) { store in
-            SwitchStore(store) {
-                CaseLet(
-                    state: /MyRouter.Route.first,
-                    action: MyRouter.Route.Action.first,
-                    then: FirstView.init
-                )
-                // Other case views for all routes declared...
+        WithRoutingStore(store) { rootStore, navigation, _ in
+            RoutedNavigationStack(navigation: navigation) {
+                // The root view receives the scoped store 
+                //  of `MyRouter`'s root state and root action 
+                MyRootView(store: rootStore)
             }
+        } routes: { store in
+            // All your route views with SwitchStore/CaseLet...
         }
     }
 }
@@ -141,7 +140,8 @@ struct MyRouterView: View {
 
 ## Known limitations and issues
 
-- It is currently not possible to make other types of modal presentation, rather than `.sheet(...)`, without modifying the contents of library itself.
+- Effect cancellation needs to be handled manually;
+- Dismissing a screen while editing a value with @BindingState will warn of unhandled actions.
 
 ## License
 

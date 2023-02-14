@@ -55,7 +55,7 @@ public final class Modal<Route: Routing, RouteView: View> {
 /// Usage:
 /// ```
 /// WithRoutingStore(store) { rootStore, navigation, modal in
-///     NavigationStackWithStore(
+///     RoutedNavigationStack(
 ///         navigation: navigation,
 ///         rootView: { LandingView(store: rootStore) }
 ///     )

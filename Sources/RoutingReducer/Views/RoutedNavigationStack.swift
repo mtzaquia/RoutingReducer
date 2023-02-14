@@ -25,28 +25,31 @@ import ComposableArchitecture
 
 /// A view capable of handling navigation described in a ``RoutingReducerProtocol``.
 ///
-/// This view uses a `NavigationStack` to manage a navigation and modals attached to it.
-/// For iOS 15, see ``NavigationControllerWithStore`` instead.
+/// This view uses a `NavigationStack` to manage a navigation and modals attached to it on iOS 16+,
+/// and a representable wrapping a `UINavigationController` for iOS 15.
+///
+/// - On iOS 15, you may also provide an instance of `UINavigationBarAppearance` to customise your bar.
+/// - On iOS 16, prefer using `.toolbar(...)` modifiers.
 ///
 /// Usage:
 /// ```
 /// WithRoutingStore(store) { rootStore, navigation, _ in
-///     NavigationStackWithStore(navigation: navigation) {
+///     RoutedNavigationStack(navigation: navigation) {
 ///         RootView(store: rootStore)
 ///     }
 /// }
 /// ```
-@available(iOS 16, *)
-public struct NavigationStackWithStore<
+public struct RoutedNavigationStack<
     State: RoutingState,
     Action: RoutingAction,
     RootView: View,
     RouteView: View
 >: View where State.Route == Action.Route {
     let navigation: Navigation<State, Action, RouteView>
+    let barAppearance: UINavigationBarAppearance?
     let rootView: RootView
 
-    /// Creates a new instance of ``NavigationStackWithStore``.
+    /// Creates a new instance of ``RoutedNavigationStack``.
     ///
     /// - Parameters:
     ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``(...) { ... }`.
@@ -56,17 +59,47 @@ public struct NavigationStackWithStore<
         @ViewBuilder rootView: @escaping () -> RootView
     ) {
         self.navigation = navigation
+        self.barAppearance = nil
+        self.rootView = rootView()
+    }
+
+    @available(iOS, obsoleted: 16, renamed: "init(navigation:rootView:)")
+    /// Creates a new instance of ``RoutedNavigationStack`` with a custom bar appearance.
+    ///
+    /// - Parameters:
+    ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``(...) { ... }`.
+    ///   - barAppearance: An instance of `UINavigationBarAppearance` used to customise the
+    ///   `UINavigationBar` wrapped by this representable.
+    ///   - rootView: The root `SwiftUI.View` for this flow.
+    public init(
+        navigation: Navigation<State, Action, RouteView>,
+        barAppearance: UINavigationBarAppearance? = nil,
+        @ViewBuilder rootView: @escaping () -> RootView
+    ) {
+        self.navigation = navigation
+        self.barAppearance = barAppearance
         self.rootView = rootView()
     }
 
     public var body: some View {
-//        WithViewStore(store) { viewStore in
-            NavigationStack(path: navigation.navigationPathBinding()) {
+        if #available(iOS 16, *) {
+            NavigationStack(
+                path: navigation.navigationPathBinding()
+            ) {
                 rootView
                 .navigationDestination(
                     for: State.Route.ID.self,
                     destination: navigation.content
                 )
             }
+        } else {
+            _NavigationControllerRepresentable(
+                routePath: navigation.routePathBinding,
+                barAppearance: barAppearance,
+                rootView: rootView,
+                viewForRoute: navigation.content
+            )
+            .ignoresSafeArea()
+        }
     }
 }

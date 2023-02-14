@@ -22,7 +22,7 @@
 
 import ComposableArchitecture
 
-/// Declares a type that can be used in combination with ``NavigationStackWithStore`` for stateful navigation.
+/// Declares a type that can be used in combination with ``RoutedNavigationStack`` for stateful navigation.
 ///
 /// - Important:
 ///     - The `State` of this reducer **must** conform to ``RoutingState``.

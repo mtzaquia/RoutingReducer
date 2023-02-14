@@ -23,7 +23,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct _NavigationControllerWithStore<
+struct _NavigationControllerRepresentable<
     Route: Routing,
     RootView: View,
     RouteView: View
@@ -46,9 +46,10 @@ struct _NavigationControllerWithStore<
     }
 
     func makeUIViewController(context: Context) -> _UINavigationControllerWithRoutePath {
-        let nc = _UINavigationControllerWithRoutePath(rootViewController: UIHostingController(rootView: rootView))
+        let nc = _UINavigationControllerWithRoutePath()
         nc.delegate = context.coordinator
         nc.routePathIds = routePath.map(\.id).map(AnyHashable.init)
+        nc.viewControllers = [UIHostingController(rootView: rootView)] + routePath.map { UIHostingController(rootView: viewForRoute($0.id)) }
         updateBarAppearance(for: nc)
         return nc
     }
@@ -118,7 +119,7 @@ struct _NavigationControllerWithStore<
 
 // MARK: - Private resolutions
 
-extension _NavigationControllerWithStore {
+extension _NavigationControllerRepresentable {
     final class Coordinator: NSObject, UINavigationControllerDelegate {
         var onPopToIndex: (_UINavigationControllerWithRoutePath, Int) -> Void
 
