@@ -111,35 +111,58 @@ enum Route: Routing {
 
 ### WithRoutingStore
 
-_..._
-
-### RoutedNavigationStack
-
-The view used for installing and displaying a navigation flow is `RoutedNavigationStack`.
-
-This views receive the appropriate navigation state extracted from your store using `WithRoutingStore` and, similarly to the Router, the root view for the navigation.
-
-Most commonly, usages of this view will follow the pattern below:
+Every view that is the base of a given router should hold a store of that reducer and extract the current presentation state using the special `WithRoutingStore` view, as well as provide all possible views via the `routes:` parameter. 
 
 ```swift
 struct MyRouterView: View {
-    let store: StoreOf<MyRouter>
+    let store: StoreOf<MyModalRouter>
     var body: some View {
-        WithRoutingStore(store) { rootStore, navigation, _ in
-            RoutedNavigationStack(navigation: navigation) {
-                // The root view receives the scoped store 
-                //  of `MyRouter`'s root state and root action 
-                MyRootView(store: rootStore)
-            }
+        WithRoutingStore(store) { rootStore, navigation, modal in
+            // `rootStore` must be given to the root view of your router
+            // `navigation` may be provided to a `RoutedNavigationStack` if you expect a navigation stack in your flow.
+            // `modal` may be unwrapped and provided to SwiftUI modifiers for presenting a sheet, for instance.
+            MyRootView(store: rootStore)
+                .sheet(item: modal.item, content: modal.content)
         } routes: { store in
-            // All your route views with SwitchStore/CaseLet...
+            SwitchStore(store) {
+                CaseLet(
+                    state: /MyModalRouter.Route.modal,
+                    action: MyModalRouter.Route.Action.modal,
+                    then: ModalView.init
+                )
+            }
         }
     }
 }
 ```
 
+### RoutedNavigationStack
+
+If you would like to deal with a stacked navigation, you should use `RoutedNavigationStack` as the top-level view in your `WithRoutingStore` declaration. This view will receive the navigation state extracted from your store using `WithRoutingStore` and the root view for the navigation flow.
+
+```swift
+struct MyNavigationRouterView: View {
+    let store: StoreOf<MyNavigationRouter>
+    var body: some View {
+        WithRoutingStore(store) { rootStore, navigation, _ in
+            // Pass the `navigation` along to your `RoutedNavigationStack` initialiser.
+            RoutedNavigationStack(navigation: navigation) {
+                // The root view is now declared as part of the `RoutedNavigationStack`
+                // and will act as the navigation root, receiving the `rootStore` instance.
+                MyRootView(store: rootStore)
+            }
+        } routes: { store in
+            // All your navigation destination views with SwitchStore/CaseLet...
+        }
+    }
+}
+```
+
+You can, naturally, combine navigation and modality at will.
+
 ## Known limitations and issues
 
+- There is no convenient way to use different modal presentations for different routes, though this can be achieved with a custom binding;
 - Effect cancellation needs to be handled manually;
 - Dismissing a screen while editing a value with `@BindingState` will warn of unhandled actions.
 
