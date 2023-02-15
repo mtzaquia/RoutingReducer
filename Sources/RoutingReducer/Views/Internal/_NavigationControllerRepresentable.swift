@@ -106,14 +106,14 @@ struct _NavigationControllerRepresentable<
     private func updateBarAppearance(for navigationController: UINavigationController) {
         let bar = navigationController.navigationBar
 
+        defer { bar.setNeedsLayout() }
+
         guard let barAppearance else { return }
 
         bar.compactAppearance = barAppearance
         bar.standardAppearance = barAppearance
         bar.scrollEdgeAppearance = barAppearance
         bar.compactScrollEdgeAppearance = barAppearance
-
-        bar.setNeedsLayout()
     }
 }
 
