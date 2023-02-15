@@ -1,6 +1,6 @@
 # RoutingReducer
 
-RoutingReducer is a library aiming at an improved developer experience for stateful navigation on TCA. It is loosely inspired by the coordinator pattern.
+RoutingReducer is a framework for stateful navigation for stacks and modals with TCA. It is loosely inspired by the coordinator pattern, can be adopted gradually and be used recursively.
 
 ## Instalation
 
