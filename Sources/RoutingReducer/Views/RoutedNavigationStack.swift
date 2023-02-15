@@ -52,7 +52,7 @@ public struct RoutedNavigationStack<
     /// Creates a new instance of ``RoutedNavigationStack``.
     ///
     /// - Parameters:
-    ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``(...) { ... }`.
+    ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``.
     ///   - rootView: The root `SwiftUI.View` for this flow.
     public init(
         navigation: Navigation<State, Action, RouteView>,

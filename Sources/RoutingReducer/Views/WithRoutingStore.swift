@@ -51,11 +51,30 @@ public struct WithRoutingStore<
     let routes: (Store<State.Route, State.Route.Action>) -> RouteView
 
     public typealias ContentBuilder = (
-        Store<State.RootState, Action.RootAction>,
-        Navigation<State, Action, RouteView>,
-        Modal<State.Route, RouteView>
+        _ rootStore: Store<State.RootState, Action.RootAction>,
+        _ navigation: Navigation<State, Action, RouteView>,
+        _ modal: Modal<State.Route, RouteView>
     ) -> ResultView
 
+    /// Builds a new instance of ``WithRoutingStore``.
+    ///
+    /// ```swift
+    /// WithRoutingStore(store) { rootStore, navigation, modal in
+    ///     ...
+    /// } routes: { store in
+    ///     SwitchStore(store) {
+    ///         ...
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - store: The store of a ``RoutingState`` and a ``RoutingAction``,
+    ///   also representable as `StoreOf<R: RoutingReducerProtocol>`.
+    ///   - content: The base view and all of its attachments. You can use the
+    ///   `rootStore`, `navigation` and `modal` parameters provided as input to this closure
+    ///   to build your presentation strategy.
+    ///   - routes: A `SwitchStore` view for all possible routes from the `Store`'s reducer.
     public init(
         _ store: Store<State, Action>,
         content: @escaping ContentBuilder,
@@ -82,7 +101,9 @@ public struct WithRoutingStore<
                         then: routes
                     )
                 },
-                .init(item: ViewStore(store.navigationStore).binding(\.$currentModal)) { item in
+                .init(
+                    item: ViewStore(store.navigationStore).binding(\.$currentModal)
+                ) { item in
                     IfLetStore(
                         store.scope(
                             state: replayNonNil({ _ in item }),
