@@ -8,7 +8,7 @@ RoutingReducer is available via Swift Package Manager.
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/mtzaquia/RoutingReducer.git", .upToNextMajor(from: "0.0.10")),
+  .package(url: "https://github.com/mtzaquia/RoutingReducer.git", .upToNextMajor(from: "0.0.11")),
 ],
 ```
 
