@@ -43,46 +43,65 @@ public struct RoutedNavigationStack<
     State: RoutingState,
     Action: RoutingAction,
     RootView: View,
-    RouteView: View
+    CaseLetView: View
 >: View where State.Route == Action.Route {
-    let navigation: Navigation<State, Action, RouteView>
+
+    public typealias RootSwitch = SwitchStore<State.Route, State.Route.Action, CaseLetView>
+
+    let shouldUseRepresentable: Bool
+    let navigation: Navigation<State, Action, RootSwitch>
     let barAppearance: UINavigationBarAppearance?
     let rootView: RootView
 
+    @available(iOS 16, *)
     /// Creates a new instance of ``RoutedNavigationStack``.
     ///
     /// - Parameters:
     ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``.
     ///   - rootView: The root `SwiftUI.View` for this flow.
     public init(
-        navigation: Navigation<State, Action, RouteView>,
+        navigation: Navigation<State, Action, RootSwitch>,
         @ViewBuilder rootView: @escaping () -> RootView
     ) {
+        shouldUseRepresentable = false
         self.navigation = navigation
         self.barAppearance = nil
         self.rootView = rootView()
     }
 
-    @available(iOS, obsoleted: 16, renamed: "init(navigation:rootView:)")
-    /// Creates a new instance of ``RoutedNavigationStack`` with a custom bar appearance.
+    /// Explicitly creates a new instance of ``RoutedNavigationStack`` backed by a `UINavigationController`
+    /// with an optional, custom bar appearance.
     ///
     /// - Parameters:
     ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``(...) { ... }`.
     ///   - barAppearance: An instance of `UINavigationBarAppearance` used to customise the
     ///   `UINavigationBar` wrapped by this representable.
     ///   - rootView: The root `SwiftUI.View` for this flow.
-    public init(
-        navigation: Navigation<State, Action, RouteView>,
-        barAppearance: UINavigationBarAppearance? = nil,
+    public static func representable(
+        navigation: Navigation<State, Action, RootSwitch>,
+        barAppearance: UINavigationBarAppearance,
+        @ViewBuilder rootView: @escaping () -> RootView
+    ) -> Self {
+        self.init(
+            navigation: navigation,
+            barAppearance: barAppearance,
+            rootView: rootView
+        )
+    }
+
+    init(
+        navigation: Navigation<State, Action, RootSwitch>,
+        barAppearance: UINavigationBarAppearance?,
         @ViewBuilder rootView: @escaping () -> RootView
     ) {
+        self.shouldUseRepresentable = true
         self.navigation = navigation
         self.barAppearance = barAppearance
         self.rootView = rootView()
     }
 
     public var body: some View {
-        if #available(iOS 16, *) {
+        if #available(iOS 16, *), !shouldUseRepresentable {
             NavigationStack(
                 path: navigation.navigationPathBinding()
             ) {

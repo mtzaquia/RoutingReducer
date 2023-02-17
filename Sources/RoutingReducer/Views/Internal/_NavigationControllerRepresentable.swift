@@ -48,6 +48,9 @@ struct _NavigationControllerRepresentable<
     func makeUIViewController(context: Context) -> _UINavigationControllerWithRoutePath {
         let nc = _UINavigationControllerWithRoutePath()
         nc.delegate = context.coordinator
+
+        nc.navigationBar.prefersLargeTitles = true
+
         nc.routePathIds = routePath.map(\.id).map(AnyHashable.init)
         nc.viewControllers = [UIHostingController(rootView: rootView)] + routePath.map { UIHostingController(rootView: viewForRoute($0.id)) }
         updateBarAppearance(for: nc)

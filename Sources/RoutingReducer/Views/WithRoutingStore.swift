@@ -44,16 +44,19 @@ public struct WithRoutingStore<
     State: RoutingState,
     Action: RoutingAction,
     ResultView: View,
-    RouteView: View
+    CaseLetView: View
 >: View where State.Route == Action.Route {
+
+    public typealias RootSwitch = SwitchStore<State.Route, State.Route.Action, CaseLetView>
+
     let store: Store<State, Action>
     let content: ContentBuilder
-    let routes: (Store<State.Route, State.Route.Action>) -> RouteView
+    let routes: (Store<State.Route, State.Route.Action>) -> RootSwitch
 
     public typealias ContentBuilder = (
         _ rootStore: Store<State.RootState, Action.RootAction>,
-        _ navigation: Navigation<State, Action, RouteView>,
-        _ modal: Modal<State.Route, RouteView>
+        _ navigation: Navigation<State, Action, RootSwitch>,
+        _ modal: Modal<State.Route, RootSwitch>
     ) -> ResultView
 
     /// Builds a new instance of ``WithRoutingStore``.
@@ -78,7 +81,7 @@ public struct WithRoutingStore<
     public init(
         _ store: Store<State, Action>,
         content: @escaping ContentBuilder,
-        routes: @escaping (Store<State.Route, State.Route.Action>) -> RouteView
+        routes: @escaping (Store<State.Route, State.Route.Action>) -> RootSwitch
     ) {
         self.store = store
         self.content = content
