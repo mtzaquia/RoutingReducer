@@ -90,10 +90,16 @@ struct _NavigationControllerRepresentable<
                     continue
                 }
 
+                let pushingController = UIHostingController(rootView: viewForRoute(route.id))
+
+                // This ensures `pushingController.navigationItem.largeTitleDisplayMode` is
+                // set **before** the view is pushed, resulting in a proper resizing animation
+                //  in the UINavigationBar. Pending performance review to assess impact.
+                let hostingView = pushingController.view as? _UIHostingView<RouteView>
+                _ = hostingView?.measureRender()
+
                 navigationController.pushViewController(
-                    UIHostingController(
-                        rootView: viewForRoute(route.id)
-                    ),
+                    pushingController,
                     animated: true,
                     routeId: routeId
                 )
