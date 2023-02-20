@@ -117,10 +117,20 @@ struct LandingRouterView: View {
     let store: StoreOf<LandingRouter>
     var body: some View {
         WithRoutingStore(store) { rootStore, navigation, modal in
-            RoutedNavigationStack(navigation: navigation) {
-                LandingView(store: rootStore)
+            if #available(iOS 16, *) {
+                RoutedNavigationStack(navigation: navigation) {
+                    LandingView(store: rootStore)
+                }
+                .sheet(item: modal.item, content: modal.content)
+            } else {
+                RoutedNavigationStack.representable(
+                    navigation: navigation,
+                    barAppearance: UINavigationBarAppearance()
+                ) {
+                    LandingView(store: rootStore)
+                }
+                .sheet(item: modal.item, content: modal.content)
             }
-            .sheet(item: modal.item, content: modal.content)
         } routes: { store in
             SwitchStore(store) {
                 CaseLet(

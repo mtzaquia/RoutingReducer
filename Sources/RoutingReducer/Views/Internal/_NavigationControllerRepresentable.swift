@@ -91,6 +91,8 @@ struct _NavigationControllerRepresentable<
                 }
 
                 let pushingController = UIHostingController(rootView: viewForRoute(route.id))
+                // ensures navigationItem properties are evaluated
+                // before the pushing animation starts.
                 pushingController._render(seconds: 0)
 
                 navigationController.pushViewController(

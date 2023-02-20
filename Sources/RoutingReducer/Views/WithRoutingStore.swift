@@ -97,7 +97,7 @@ public struct WithRoutingStore<
     ///   - routes: A `SwitchStore` view for all possible routes from the `Store`'s reducer.
     public init(
         _ store: Store<State, Action>,
-        content: @escaping ContentBuilder,
+        @ViewBuilder content: @escaping ContentBuilder,
         routes: @escaping (Store<State.Route, State.Route.Action>) -> RootSwitch
     ) {
         self.store = store

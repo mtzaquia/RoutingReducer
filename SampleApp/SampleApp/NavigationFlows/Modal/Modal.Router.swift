@@ -90,10 +90,20 @@ struct ModalRouterView: View {
     let store: StoreOf<ModalRouter>
     var body: some View {
         WithRoutingStore(store) { rootStore, navigation, modal in
-            RoutedNavigationStack(navigation: navigation) {
-                ModalView(store: rootStore)
+            if #available(iOS 16, *) {
+                RoutedNavigationStack(navigation: navigation) {
+                    ModalView(store: rootStore)
+                }
+                .fullScreenCover(item: modal.item, content: modal.content)
+            } else {
+                RoutedNavigationStack.representable(
+                    navigation: navigation,
+                    barAppearance: UINavigationBarAppearance()
+                ) {
+                    ModalView(store: rootStore)
+                }
+                .fullScreenCover(item: modal.item, content: modal.content)
             }
-            .fullScreenCover(item: modal.item, content: modal.content)
         } routes: { store in
             SwitchStore(store) {
                 CaseLet(
