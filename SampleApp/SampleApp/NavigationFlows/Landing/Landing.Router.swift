@@ -125,7 +125,7 @@ struct LandingRouterView: View {
             } else {
                 RoutedNavigationStack.representable(
                     navigation: navigation,
-                    barAppearance: UINavigationBarAppearance()
+                    barAppearance: nil
                 ) {
                     LandingView(store: rootStore)
                 }

@@ -70,11 +70,7 @@ import ComposableArchitecture
 ///     }
 /// }
 /// ```
-public protocol RoutingReducerProtocol<
-    Route,
-    RootReducer,
-    RouteReducer
->: ReducerProtocol
+public protocol RoutingReducerProtocol: ReducerProtocol
 where State: RoutingState, Action: RoutingAction, State.Route == Route, Action.Route == Route {
     /// The ``Routing`` type this reducer interacts with.
     associatedtype Route: Routing

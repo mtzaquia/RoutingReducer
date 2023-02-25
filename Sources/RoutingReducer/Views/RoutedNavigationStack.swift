@@ -74,12 +74,12 @@ public struct RoutedNavigationStack<
     ///
     /// - Parameters:
     ///   - navigation: The `Presentation` instance extracted from a `Store` using ``WithRoutingStore``(...) { ... }`.
-    ///   - barAppearance: An instance of `UINavigationBarAppearance` used to customise the
+    ///   - barAppearance: An optional instance of `UINavigationBarAppearance` used to customise the
     ///   `UINavigationBar` wrapped by this representable.
     ///   - rootView: The root `SwiftUI.View` for this flow.
     public static func representable(
         navigation: Navigation<State, Action, RootSwitch>,
-        barAppearance: UINavigationBarAppearance,
+        barAppearance: UINavigationBarAppearance?,
         @ViewBuilder rootView: @escaping () -> RootView
     ) -> Self {
         self.init(
@@ -112,13 +112,12 @@ public struct RoutedNavigationStack<
                 )
             }
         } else {
-            _NavigationControllerRepresentable(
-                routePath: navigation.routePathBinding,
+            NavigationControllerRepresentable(
+                navigationPath: navigation.routePathBinding,
                 barAppearance: barAppearance,
-                rootView: rootView,
-                viewForRoute: navigation.content
+                rootView: { rootView },
+                navigationDestination: navigation.content
             )
-            .ignoresSafeArea()
         }
     }
 }

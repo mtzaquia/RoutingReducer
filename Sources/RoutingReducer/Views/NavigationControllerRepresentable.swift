@@ -23,26 +23,89 @@
 import ComposableArchitecture
 import SwiftUI
 
+/// A representable for supporting iOS 16's `NavigationStack` capabilities on iOS 15.
+///
+/// Usage:
+/// ```
+/// NavigationControllerRepresentable(
+///     navigationPath: $navigationPath,
+///     barAppearance: someBarAppearance
+/// ) {
+///     /* your root view */
+/// } navigationDestination: { id in
+///     /* your navigation destination for the given ID */
+/// }
+/// ```
+public struct NavigationControllerRepresentable<
+    Segment: Identifiable,
+    RootView: View,
+    RouteView: View
+>: View {
+    @Binding var navigationPath: IdentifiedArrayOf<Segment>
+    let barAppearance: UINavigationBarAppearance?
+    let rootView: () -> RootView
+    let navigationDestination: (Segment.ID) -> RouteView
+
+    public init(
+        navigationPath: Binding<IdentifiedArrayOf<Segment>>,
+        barAppearance: UINavigationBarAppearance? = nil,
+        @ViewBuilder rootView: @escaping () -> RootView,
+        @ViewBuilder navigationDestination: @escaping (Segment.ID) -> RouteView
+    ) {
+        _navigationPath = navigationPath
+        self.barAppearance = barAppearance
+        self.rootView = rootView
+        self.navigationDestination = navigationDestination
+    }
+
+    public var body: some View {
+        _NavigationControllerRepresentable(
+            navigationPath: $navigationPath,
+            barAppearance: barAppearance,
+            rootView: rootView,
+            navigationDestination: navigationDestination
+        )
+        .ignoresSafeArea()
+    }
+}
+
+public struct _NeverIdentifiable: Identifiable {
+    public var id: Int { 0 }
+}
+
+public extension NavigationControllerRepresentable
+where Segment == _NeverIdentifiable, RouteView == EmptyView {
+    init(
+        barAppearance: UINavigationBarAppearance? = nil,
+        @ViewBuilder rootView: @escaping () -> RootView
+    ) {
+        _navigationPath = .constant(.init())
+        self.barAppearance = barAppearance
+        self.rootView = rootView
+        self.navigationDestination = { _ in EmptyView() }
+    }
+}
+
 struct _NavigationControllerRepresentable<
-    Route: Routing,
+    Segment: Identifiable,
     RootView: View,
     RouteView: View
 >: UIViewControllerRepresentable {
-    @Binding var routePath: IdentifiedArrayOf<Route>
+    @Binding var navigationPath: IdentifiedArrayOf<Segment>
     let barAppearance: UINavigationBarAppearance?
     let rootView: RootView
-    let viewForRoute: (Route.ID) -> RouteView
+    let navigationDestination: (Segment.ID) -> RouteView
 
     init(
-        routePath: Binding<IdentifiedArrayOf<Route>>,
+        navigationPath: Binding<IdentifiedArrayOf<Segment>>,
         barAppearance: UINavigationBarAppearance? = nil,
-        rootView: RootView,
-        @ViewBuilder viewForRoute: @escaping (Route.ID) -> RouteView
+        @ViewBuilder rootView: () -> RootView,
+        @ViewBuilder navigationDestination: @escaping (Segment.ID) -> RouteView
     ) {
-        _routePath = routePath
+        _navigationPath = navigationPath
         self.barAppearance = barAppearance
-        self.rootView = rootView
-        self.viewForRoute = viewForRoute
+        self.rootView = rootView()
+        self.navigationDestination = navigationDestination
     }
 
     func makeUIViewController(context: Context) -> _UINavigationControllerWithRoutePath {
@@ -51,8 +114,8 @@ struct _NavigationControllerRepresentable<
 
         nc.navigationBar.prefersLargeTitles = true
 
-        nc.routePathIds = routePath.map(\.id).map(AnyHashable.init)
-        nc.viewControllers = [UIHostingController(rootView: rootView)] + routePath.map { UIHostingController(rootView: viewForRoute($0.id)) }
+        nc.routePathIds = navigationPath.map(\.id).map(AnyHashable.init)
+        nc.viewControllers = [UIHostingController(rootView: rootView)] + navigationPath.map { UIHostingController(rootView: navigationDestination($0.id)) }
         updateBarAppearance(for: nc)
         return nc
     }
@@ -70,12 +133,12 @@ struct _NavigationControllerRepresentable<
                 skipSuper: true
             )
 
-            routePath.removeLast(routePath.count - index)
+            navigationPath.removeLast(navigationPath.count - index)
         }
     }
 
     func updateNavigationController(_ navigationController: _UINavigationControllerWithRoutePath) {
-        let viewState = routePath.map(\.id).map(AnyHashable.init)
+        let viewState = navigationPath.map(\.id).map(AnyHashable.init)
         let controllerState = navigationController.routePathIds
 
         guard viewState != controllerState else {
@@ -84,13 +147,13 @@ struct _NavigationControllerRepresentable<
 
         if viewState.count > controllerState.count {
             for i in controllerState.count..<viewState.count {
-                guard let routeId = viewState[i].base as? Route.ID,
-                      let route = routePath[id: routeId]
+                guard let routeId = viewState[i].base as? Segment.ID,
+                      let route = navigationPath[id: routeId]
                 else {
                     continue
                 }
 
-                let pushingController = UIHostingController(rootView: viewForRoute(route.id))
+                let pushingController = UIHostingController(rootView: navigationDestination(route.id))
                 // ensures navigationItem properties are evaluated
                 // before the pushing animation starts.
                 pushingController._render(seconds: 0)
@@ -123,7 +186,7 @@ struct _NavigationControllerRepresentable<
     }
 }
 
-// MARK: - Private resolutions
+// MARK: - Coordinator
 
 extension _NavigationControllerRepresentable {
     final class Coordinator: NSObject, UINavigationControllerDelegate {
